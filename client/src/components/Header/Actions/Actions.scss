@@ -1,0 +1,18 @@
+.Actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 205px;
+    font-weight: 500;
+    font-size: 18px;
+    &__arrow {
+        vertical-align: middle;
+    }
+    &__currencies {
+        cursor: pointer;
+        margin-right: 22px;
+    }
+    &__cart {
+        cursor: pointer;
+    }
+}

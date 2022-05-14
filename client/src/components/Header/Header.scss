@@ -1,0 +1,16 @@
+.Header {
+    min-height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .Container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+    }
+    &__title {
+        margin: 0;
+        padding: 0;
+    }
+}

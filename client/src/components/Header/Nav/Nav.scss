@@ -1,0 +1,29 @@
+.Nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 230px;
+    display: flex;
+    justify-content: space-between;
+    &__item {
+        text-transform: uppercase;
+        font-size: 16px;
+        font-weight: 400;
+        color: rgba(29, 31, 34, 1);
+        position: relative;
+        cursor: pointer;
+    }
+    .active {
+        color: rgba(94, 206, 123, 1);
+        &::before {
+            content: "";
+            position: absolute;
+            height: 2px;
+            width: 160%;
+            bottom: -30px;
+            transform: translateX(-18%);
+            background-color: rgba(94, 206, 123, 1);
+            border: 1px solid rgba(94, 206, 123, 1);
+        }
+    }
+}
