@@ -44,16 +44,24 @@ class Header extends PureComponent {
             }).catch(() => this.setState({ error: true }))
     }
 
+    changeCurrentCurrency = (value) => {
+        this.setState(({ currentCurrency }) => ({
+            currentCurrency: value
+        }))
+    }
+
     render() {
         const { currencies, currentCurrency, categories, loading, error } = this.state;
         const notAvailable = error ? 'Navbar is not available' : null;
         const processing = loading ? 'Loading...' : null;
         const viewNav = !(error || loading || !categories) ? <Nav categories={categories} /> : null;
         const viewIcon = !(error || loading) ? <img src={logo} alt="logo" /> : null;
-        const viewActions = !(error || loading || !currentCurrency) ? <Actions current={currentCurrency} currencies={currencies} /> : null;
+        const viewActions = !(error || loading || !currentCurrency)
+            ? <Actions current={currentCurrency} currencies={currencies} change={this.changeCurrentCurrency} />
+            : null;
 
         return (
-            <div className='Header'>
+            <header className='Header'>
                 <Container>
                     {notAvailable}
                     {processing}
@@ -61,9 +69,10 @@ class Header extends PureComponent {
                     {viewIcon}
                     {viewActions}
                 </Container>
-            </div>
+            </header>
         )
     }
 }
+
 
 export default Header;

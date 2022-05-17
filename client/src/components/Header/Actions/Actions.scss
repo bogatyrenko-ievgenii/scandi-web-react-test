@@ -6,9 +6,11 @@
     font-weight: 500;
     font-size: 18px;
     &__arrow {
+        user-select: none;
         vertical-align: middle;
     }
     &__currencies {
+        user-select: none;
         cursor: pointer;
         margin-right: 22px;
     }

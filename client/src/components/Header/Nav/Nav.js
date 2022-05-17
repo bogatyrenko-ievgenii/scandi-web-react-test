@@ -1,26 +1,51 @@
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 
+import { changeCategory } from '../../../redux/actions';
 import './Nav.scss';
 
-const Nav = ({ categories }) => {
-    const onClickNavItem = (event) => {
-        document.querySelectorAll('.Nav__item').forEach((item) => {
-            item.classList.remove('active');
-        })
-        event.target.classList.add('active');
+const Nav = ({ categories, activeCategory, changeCategory }) => {
+    const setCategory = (event) => {
+        let value = event.target.value;
+        changeCategory(value);
     }
 
     return (
-        <ul className='Nav'>
-            {categories.map((category, idx) => {
-                return <li key={idx} onClick={onClickNavItem} className='Nav__item'>{category.name}</li>
-            })}
-        </ul>
+        <nav>
+            <ul className='Nav'>
+                {categories.map((category, idx) => {
+                    let active = activeCategory.idx === idx
+                        ? 'active'
+                        : null;
+
+                    return <li
+                        key={idx} value={idx}
+                        onClick={setCategory}
+                        className={`Nav__item ${active}`}
+                    >
+                        {category.name}
+                    </li>
+                })}
+            </ul>
+        </nav>
+
     );
 }
 
-Nav.propTypes = {
-    categories: PropTypes.array.isRequired
+function mapStateToProps(state) {
+    return {
+        activeCategory: state.activeCategory
+    }
 }
 
-export default Nav;
+function mapDispatchToProps(dispatch) {
+    return { changeCategory: (idx) => dispatch(changeCategory(idx)) }
+}
+
+Nav.propTypes = {
+    categories: PropTypes.array.isRequired,
+    activeCategory: PropTypes.object.isRequired,
+    changeCategory: PropTypes.func.isRequired,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Nav);
