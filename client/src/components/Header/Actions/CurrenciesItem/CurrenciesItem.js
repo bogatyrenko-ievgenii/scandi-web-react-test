@@ -9,7 +9,6 @@ const Currencies = ({ current, change, close, currency, changeCurrency }) => {
         change(value);
         close();
         changeCurrency(currency.symbol);
-        console.log(currency.symbol);
     }
 
     let active = current === currency.symbol ? 'active' : '';
