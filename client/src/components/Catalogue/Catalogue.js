@@ -13,13 +13,34 @@ class Catalogue extends PureComponent {
     state = {
         loading: false,
         error: false,
-        categoryName: '',
         products: [],
+
     }
 
     componentDidMount() {
         this.setState({ loading: true })
-        getCategory
+        this.getData();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.activeCategory.name !== this.props.activeCategory.name) {
+            this.switchCategory()
+        }
+    }
+
+    switchCategory = async () => {
+        await this.getData();
+        if (this.props.activeCategory.name !== 'all') {
+            const products = this.state.products.filter((product) => {
+                return product.category === this.props.activeCategory.name
+                    ? product : null;
+            })
+            this.setState({ products: products })
+        }
+    }
+
+    getData = () => {
+        return getCategory
             .then(response => {
                 this.setState({
                     categoryName: response.data.category.name,
@@ -37,10 +58,10 @@ class Catalogue extends PureComponent {
 
     render() {
         const { activeCategory } = this.props;
-        const { error, loading, categoryName, products } = this.state
+        const { error, loading, products } = this.state
         const notAvailable = error ? 'Sorry, something went wrong' : null;
         const processing = loading ? 'Loading...' : null;
-        const title = activeCategory.name === categoryName
+        const title = !(loading || error || !activeCategory.name)
             ? <h1 className='Catalogue__title'>{this.makeCapitalLetter(activeCategory.name)}</h1>
             : null;
         return (

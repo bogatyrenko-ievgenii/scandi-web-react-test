@@ -1,6 +1,5 @@
 import { PureComponent } from "react"
 import PropTypes from 'prop-types'
-
 import { connect } from 'react-redux'
 
 import cartIcon from './../icons/Vector.svg'
@@ -70,13 +69,13 @@ function mapStateToProps(state) {
     }
 }
 
-
-// {product.prices[0].currency.symbol}
-// {product.prices[0].amount}
-
 CatalogueItem.propTypes = {
     product: PropTypes.object.isRequired,
     activeCurrency: PropTypes.object.isRequired
 }
 
 export default connect(mapStateToProps)(CatalogueItem);
+
+
+// {product.prices[0].currency.symbol}
+// {product.prices[0].amount}
