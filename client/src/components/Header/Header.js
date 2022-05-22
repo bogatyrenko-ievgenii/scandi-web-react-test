@@ -56,7 +56,7 @@ class Header extends PureComponent {
         const processing = loading ? 'Loading...' : null;
         const viewNav = !(error || loading || !categories) ? <Nav categories={categories} /> : null;
         const viewIcon = !(error || loading) ? <img src={logo} alt="logo" /> : null;
-        const viewActions = !(error || loading || !currentCurrency)
+        const viewActions = !(error || loading || !currentCurrency || !viewIcon)
             ? <Actions current={currentCurrency} currencies={currencies} change={this.changeCurrentCurrency} />
             : null;
 
@@ -73,6 +73,5 @@ class Header extends PureComponent {
         )
     }
 }
-
 
 export default Header;

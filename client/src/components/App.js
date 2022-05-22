@@ -7,12 +7,12 @@ import './App.scss';
 
 function App() {
     return <div className="App">
-        {/* <React.StrictMode> */}
-        <Layout>
-            <Header />
-            <Catalogue></Catalogue>
-        </Layout>
-        {/* </React.StrictMode> */}
+        <React.StrictMode>
+            <Layout>
+                <Header />
+                <Catalogue></Catalogue>
+            </Layout>
+        </React.StrictMode>
     </div>;
 }
 

@@ -1,8 +1,16 @@
 import { CHANGE_CATEGORY } from "./types";
+import { CHANGE_CURRENCY } from "./types";
 
-export function changeCategory(value) {
+export function changeCategory(name) {
     return {
         type: CHANGE_CATEGORY,
-        payload: value
+        payload: name
+    }
+}
+
+export function changeCurrency(symbol) {
+    return {
+        type: CHANGE_CURRENCY,
+        payload: symbol
     }
 }

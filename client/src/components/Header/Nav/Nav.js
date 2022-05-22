@@ -6,20 +6,18 @@ import './Nav.scss';
 
 const Nav = ({ categories, activeCategory, changeCategory }) => {
     const setCategory = (event) => {
-        let value = event.target.value;
-        changeCategory(value);
+        changeCategory(event.target.textContent);
     }
 
     return (
         <nav>
             <ul className='Nav'>
                 {categories.map((category, idx) => {
-                    let active = activeCategory.idx === idx
+                    let active = activeCategory.name === category.name
                         ? 'active'
                         : null;
-
                     return <li
-                        key={idx} value={idx}
+                        key={idx}
                         onClick={setCategory}
                         className={`Nav__item ${active}`}
                     >
@@ -39,7 +37,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return { changeCategory: (idx) => dispatch(changeCategory(idx)) }
+    return { changeCategory: (name) => dispatch(changeCategory(name)) }
 }
 
 Nav.propTypes = {

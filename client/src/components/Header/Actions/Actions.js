@@ -1,5 +1,5 @@
 import { PureComponent } from 'react';
-import Currencies from './Currencies';
+import CurrenciesItem from './CurrenciesItem';
 
 import './Actions.scss';
 import arrow from './Icons/arrow.svg';
@@ -20,7 +20,7 @@ class Actions extends PureComponent {
 
     render() {
         const { current, currencies, change } = this.props;
-        const select = this.state.open ? <Currencies current={current} currencies={currencies} change={change} close={this.openSelect} /> : null;
+        const { open } = this.state;
 
         return (
             <>
@@ -30,7 +30,14 @@ class Actions extends PureComponent {
                     </div>
                     <img className='Actions__cart' src={cart} alt="cart" />
                 </div>
-                {select}
+                <ul className='Currencies'>
+                    {currencies.map((currency, idx) => {
+                        return open
+                            ? <CurrenciesItem key={idx} currency={currency}
+                                current={current} change={change} close={this.openSelect} />
+                            : null;
+                    })}
+                </ul>
             </>
         );
     }

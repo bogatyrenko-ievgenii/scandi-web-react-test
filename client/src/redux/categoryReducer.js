@@ -1,9 +1,7 @@
 import { CHANGE_CATEGORY } from './types';
-// import { changeCategory } from './actions';
-
 
 const initialState = {
-    idx: 0,
+    name: 'all',
 }
 
 export const categoryReducer = (state = initialState, { type, payload }) => {
@@ -11,7 +9,7 @@ export const categoryReducer = (state = initialState, { type, payload }) => {
         case CHANGE_CATEGORY:
             return {
                 ...state,
-                idx: payload
+                name: payload
             }
         default:
             return state;

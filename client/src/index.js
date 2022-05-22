@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 
 import './index.css';
 
-const store = createStore(rootreducer);
+const store = createStore(rootreducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
