@@ -14,7 +14,6 @@ class Catalogue extends PureComponent {
         loading: false,
         error: false,
         products: [],
-
     }
 
     componentDidMount() {
@@ -65,7 +64,7 @@ class Catalogue extends PureComponent {
             ? <h1 className='Catalogue__title'>{this.makeCapitalLetter(activeCategory.name)}</h1>
             : null;
         return (
-            <div className='Catalogue'>
+            <section className='Catalogue'>
                 <Container>
                     {notAvailable}
                     {processing}
@@ -76,7 +75,7 @@ class Catalogue extends PureComponent {
                         })}
                     </ul>}
                 </Container>
-            </div >
+            </section >
         );
     }
 }

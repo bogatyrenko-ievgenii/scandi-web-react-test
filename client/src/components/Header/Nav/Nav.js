@@ -1,12 +1,14 @@
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types'
-
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { changeCategory } from '../../../redux/actions';
+
 import './Nav.scss';
 
 const Nav = ({ categories, activeCategory, changeCategory }) => {
     const setCategory = (event) => {
-        changeCategory(event.target.textContent);
+        let text = event.target.textContent;
+        changeCategory(text);
     }
 
     return (
@@ -20,8 +22,7 @@ const Nav = ({ categories, activeCategory, changeCategory }) => {
                         key={idx}
                         onClick={setCategory}
                         className={`Nav__item ${active}`}
-                    >
-                        {category.name}
+                    ><Link className='Nav__link' to={category.name}>{category.name}</Link>
                     </li>
                 })}
             </ul>

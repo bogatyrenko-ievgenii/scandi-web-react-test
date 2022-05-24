@@ -13,32 +13,58 @@
         user-select: none;
         cursor: pointer;
         margin-right: 22px;
+        z-index: 3;
     }
     &__cart {
         cursor: pointer;
+        position: relative;
+    }
+    &__qty {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        color: rgba(255, 255, 255, 1);
+        background-color: rgba(0, 0, 0, 1);
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 16px;
     }
 }
 
 .Currencies {
+    padding: 10px 0;
     list-style-type: none;
     position: absolute;
     top: 64px;
-    right: -30px;
+    right: 250px;
     font-weight: 500;
     font-size: 18px;
     color: rgba(29, 31, 34, 1);
     box-shadow: 0px 0px 0.4px;
-    z-index: 2;
+    z-index: 3;
     &__item {
         padding-left: 20px;
-        height: 62px;
+        height: 45px;
         width: 114px;
         display: flex;
         align-items: center;
         cursor: pointer;
     }
     .active {
-        height: 45px;
         background-color: rgba(238, 238, 238, 1);
     }
+}
+
+.backDrop {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 2;
 }

@@ -1,16 +1,18 @@
 import { PureComponent } from 'react';
 import CurrenciesItem from './CurrenciesItem';
+import { PropTypes } from 'prop-types';
 
 import './Actions.scss';
 import arrow from './Icons/arrow.svg';
 import cart from './Icons/Empty Cart.svg';
-import { PropTypes } from 'prop-types';
 
 class Actions extends PureComponent {
 
     state = {
         open: false
     }
+
+
 
     openSelect = () => {
         this.setState(({ open }) => ({
@@ -28,13 +30,15 @@ class Actions extends PureComponent {
                     <div onClick={this.openSelect} className="Actions__currencies">
                         {current} <img className='Actions__arrow' src={arrow} alt="v" />
                     </div>
-                    <img className='Actions__cart' src={cart} alt="cart" />
+                    <div className='Actions__cart'><img className='Actions__image' src={cart} alt="cart" />
+                        <span className='Actions__qty'>3</span></div>
                 </div>
+                {open && <div onClick={this.openSelect} className="backDrop"></div>}
                 <ul className='Currencies'>
                     {currencies.map((currency, idx) => {
                         return open
                             ? <CurrenciesItem key={idx} currency={currency}
-                                current={current} change={change} close={this.openSelect} />
+                                change={change} close={this.openSelect} />
                             : null;
                     })}
                 </ul>

@@ -1,7 +1,13 @@
 import { CHANGE_CATEGORY } from './types';
 
+const removeSlash = (text) => {
+    const re = /^\/\w+$/i;
+    return !re.test(text) ? text : text.slice(1)
+}
+
+
 const initialState = {
-    name: 'all',
+    name: removeSlash(document.location.pathname),
 }
 
 export const categoryReducer = (state = initialState, { type, payload }) => {

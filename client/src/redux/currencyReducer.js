@@ -1,7 +1,11 @@
 import { CHANGE_CURRENCY } from "./types";
 
+const getCurrencyFormLS = () => {
+    return localStorage.getItem('currency');
+}
+
 const initialState = {
-    symbol: '$'
+    symbol: getCurrencyFormLS()
 }
 
 export const currencyReducer = (state = initialState, { type, payload }) => {

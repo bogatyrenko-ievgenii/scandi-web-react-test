@@ -1,26 +1,36 @@
+import { PureComponent } from "react";
 import { connect } from "react-redux";
 
 import { changeCurrency } from "../../../../redux/actions";
 
 
-const Currencies = ({ current, change, close, currency, changeCurrency }) => {
+class Currencies extends PureComponent {
 
-    const handleClick = (value) => {
+    state = {
+        mouseOverStyle: ''
+    }
+
+    handleClick = (value) => {
+        const { change, close, changeCurrency, currency } = this.props;
         change(value);
         close();
         changeCurrency(currency.symbol);
+        localStorage.setItem('currency', value)
     }
 
-    let active = current === currency.symbol ? 'active' : '';
+    onEnter = () => this.setState({ mouseOverStyle: 'active' });
+    onExit = () => this.setState({ mouseOverStyle: '' });
 
-
-    return (
-        <li
-            onClick={() => handleClick(currency.symbol)}
-            className={`Currencies__item ${active}`}
-        >{currency.symbol} {currency.label}
-        </li>
-    )
+    render() {
+        const { currency } = this.props;
+        return (
+            <li
+                onClick={(event) => this.handleClick(currency.symbol)}
+                className={`Currencies__item ${this.state.mouseOverStyle}`}
+            ><span onMouseOver={this.onEnter} onMouseOut={this.onExit}>{currency.symbol} {currency.label}</span>
+            </li>
+        )
+    }
 }
 
 function mapStateToProps(state) {

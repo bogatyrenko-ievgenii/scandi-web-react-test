@@ -20,7 +20,11 @@ class Header extends PureComponent {
 
     componentDidMount() {
         this.onGetNavigation();
-        this.onGetCurrencies();
+        this.onGetCurrencies(this.getCurrencyFormLS());
+    }
+
+    getCurrencyFormLS = () => {
+        return localStorage.getItem('currency');
     }
 
     onGetNavigation = () => {
@@ -33,12 +37,12 @@ class Header extends PureComponent {
             }).catch(() => this.setState({ error: true }))
     }
 
-    onGetCurrencies = () => {
+    onGetCurrencies = (currency) => {
         getCurrencies
             .then(response => {
                 this.setState({
                     currencies: response.data.currencies,
-                    currentCurrency: response.data.currencies[0].symbol,
+                    currentCurrency: currency || response.data.currencies[0].symbol,
                     loading: response.loading
                 })
             }).catch(() => this.setState({ error: true }))

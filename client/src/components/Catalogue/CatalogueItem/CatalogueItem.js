@@ -1,6 +1,7 @@
 import { PureComponent } from "react"
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import cartIcon from './../icons/Vector.svg'
 
@@ -25,7 +26,6 @@ class CatalogueItem extends PureComponent {
         const { product, activeCurrency } = this.props;
         const { prices } = product;
         const { symbol } = activeCurrency;
-
         prices.forEach((price) => {
             if (price.currency.symbol === symbol) {
                 this.setState({ symbol: symbol, amount: price.amount })
@@ -49,7 +49,7 @@ class CatalogueItem extends PureComponent {
         const outOfStock = !product.inStock;
         const classOutOfStock = outOfStock ? 'disabled' : '';
         const show = showBtn ? 'show' : '';
-
+        // product.attributes.forEach(attr => console.log(attr))
         return <li
             disabled={outOfStock} onMouseEnter={() => this.showBtn(classOutOfStock)}
             onMouseLeave={this.hideBtn} className={`Catalogue__item ${classOutOfStock}`}
@@ -58,7 +58,7 @@ class CatalogueItem extends PureComponent {
             <div className='Catalogue__name'>{product.name}</div>
             <div className='Catalogue__price'>{symbol} {amount}</div>
             {outOfStock && <div className="Catalogue__outOfStock">out of stock</div>}
-            <div className={`Catalogue__addToCart ${show}`}><img className='Catalogue__icon' src={cartIcon} alt="cart" /></div>
+            <div onClick={this.addToLS} className={`Catalogue__addToCart ${show}`}><img className='Catalogue__icon' src={cartIcon} alt="cart" /></div>
         </li>
     }
 }
@@ -75,7 +75,3 @@ CatalogueItem.propTypes = {
 }
 
 export default connect(mapStateToProps)(CatalogueItem);
-
-
-// {product.prices[0].currency.symbol}
-// {product.prices[0].amount}
