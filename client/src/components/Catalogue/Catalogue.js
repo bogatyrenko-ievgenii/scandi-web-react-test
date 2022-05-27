@@ -17,7 +17,6 @@ class Catalogue extends PureComponent {
     }
 
     componentDidMount() {
-        this.setState({ loading: true })
         this.getData();
     }
 
@@ -39,6 +38,7 @@ class Catalogue extends PureComponent {
     }
 
     getData = () => {
+        this.setState({ loading: true })
         return getCategory
             .then(response => {
                 this.setState({

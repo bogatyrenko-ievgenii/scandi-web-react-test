@@ -8,26 +8,47 @@ export default onRequest(`query GetCategory{
        name
        inStock
        gallery
-       description
        category
-       attributes {
-        id
-        name
-        items {
-          displayValue
-          id
-          value
-        }
-      }
        prices {
         currency {
-          label
           symbol
         }
         amount
       }
-       brand
           }
     }
   }
   `)
+
+
+  // export default onRequest(`query GetCategory{
+  //   category {
+  //     name
+  //     products {
+  //      id
+  //      name
+  //      inStock
+  //      gallery
+  //      description
+  //      category
+  //      attributes {
+  //       id
+  //       name
+  //       items {
+  //         displayValue
+  //         id
+  //         value
+  //       }
+  //     }
+  //      prices {
+  //       currency {
+  //         label
+  //         symbol
+  //       }
+  //       amount
+  //     }
+  //      brand
+  //         }
+  //   }
+  // }
+  // `)

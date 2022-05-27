@@ -67,8 +67,8 @@ class Header extends PureComponent {
         return (
             <header className='Header'>
                 <Container>
-                    {notAvailable}
                     {processing}
+                    {notAvailable}
                     {viewNav}
                     {viewIcon}
                     {viewActions}

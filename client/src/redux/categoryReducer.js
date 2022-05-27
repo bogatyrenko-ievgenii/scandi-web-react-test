@@ -2,7 +2,7 @@ import { CHANGE_CATEGORY } from './types';
 
 const removeSlash = (text) => {
     const re = /^\/\w+$/i;
-    return !re.test(text) ? text : text.slice(1)
+    return !re.test(text) ? 'all' : text.slice(1)
 }
 
 

@@ -11,6 +11,10 @@ const Nav = ({ categories, activeCategory, changeCategory }) => {
         changeCategory(text);
     }
 
+    const setLinkTo = (name) => {
+        return name === 'all' ? '' : name;
+    }
+
     return (
         <nav>
             <ul className='Nav'>
@@ -22,7 +26,7 @@ const Nav = ({ categories, activeCategory, changeCategory }) => {
                         key={idx}
                         onClick={setCategory}
                         className={`Nav__item ${active}`}
-                    ><Link className='Nav__link' to={category.name}>{category.name}</Link>
+                    ><Link className='Nav__link' to={setLinkTo(category.name)}>{category.name}</Link>
                     </li>
                 })}
             </ul>
