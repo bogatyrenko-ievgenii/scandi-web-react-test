@@ -3,6 +3,7 @@ import { getProductByID } from '../../services/queries/product';
 import { connect } from 'react-redux';
 import { changeProdId } from '../../redux/actions';
 import Container from '../Container';
+import ProdDetails from './ProdDetails'
 
 import './Pdp.scss';
 
@@ -11,12 +12,17 @@ class Pdp extends PureComponent {
     state = {
         error: false,
         loading: false,
-        product: {}
+        product: {},
+        gallery: [],
+        activeImage: 0,
+        attributes: [],
+        prices: [],
     }
 
     componentDidMount() {
         this.getProdToState()
     }
+
 
     getProdToState = async () => {
         this.setState({ loading: true })
@@ -25,6 +31,9 @@ class Pdp extends PureComponent {
             this.setState({
                 loading: product.loading,
                 product: product.data.product,
+                gallery: product.data.product.gallery,
+                attributes: product.data.product.attributes,
+                prices: product.data.product.prices
             })
         } else {
             this.setState({
@@ -33,35 +42,45 @@ class Pdp extends PureComponent {
         }
     }
 
+    switchImage = (idx) => {
+        this.setState({ activeImage: idx })
+    }
+
     render() {
-        const { error, loading, product } = this.state;
-        // console.log(this.props);
-        const processing = loading ? 'This product was not found' : null;
+        const { error, loading, product, gallery, activeImage, attributes, prices } = this.state;
+
+        const processing = loading ? 'Loading' : null;
         const notAvailable = error ? 'Error' : null;
-        const showProduct = !(loading || error || !product) ? true : null;
-        console.log(this.state.product.gallery);
+        const showProduct = !(loading || error || !product || !gallery) ? true : null;
 
         return (
             <section className="Pdp">
-                {processing}
-                {notAvailable}
-                {showProduct &&
-                    <Container>
-                        <div className="Pdp__wrapper">
-                            <ul className="Pdp__list">
-                                {product.gallery.map((item) => {
-                                    return <img src={item} alt={product.name} />
-                                })}
-                                <h3>{product.name}</h3>
-                            </ul>
+                <Container>
+                    {processing}
+                    {notAvailable}
+                    {showProduct && <div className="Pdp__wrapper">
+                        <ul className="Pdp__list">
+                            {gallery.map((item, idx) => {
+                                return <li key={idx} onClick={() => this.switchImage(idx)} className='Pdp__item'>
+                                    <img className='Pdp__img' src={item} alt={product.name} />
+                                </li>
+                            })}
+                        </ul>
+                        <div className="Pdp__chosenImg">
+                            <img className='Pdp__img' src={gallery[activeImage]} alt={product.name} />
                         </div>
-                    </Container>
-                }
+                        <ProdDetails brand={product.brand} name={product.name} attr={attributes} descr={product.description} prices={prices} />
+                    </div>
+                    }
+                </Container>
             </section>
 
         );
     }
 }
+
+
+
 
 function mapStateToProps(state) {
     return {

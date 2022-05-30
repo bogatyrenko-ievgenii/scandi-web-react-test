@@ -1,3 +1,4 @@
 export const CHANGE_CATEGORY = 'CHANGE_CATEGORY';
 export const CHANGE_CURRENCY = 'CHANGE_CURRENCY';
-export const CHANGE_PROD_ID = 'CHANGE_PROD_ID'
+export const CHANGE_PROD_ID = 'CHANGE_PROD_ID';
+export const ADD_TO_CART = 'ADD_TO_CART';
