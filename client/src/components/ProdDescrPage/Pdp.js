@@ -2,6 +2,7 @@ import { PureComponent } from 'react';
 import { getProductByID } from '../../services/queries/product';
 import { connect } from 'react-redux';
 import { changeProdId } from '../../redux/actions';
+import { changeCategory } from '../../redux/actions'
 import Container from '../Container';
 import ProdDetails from './ProdDetails'
 
@@ -17,23 +18,27 @@ class Pdp extends PureComponent {
         activeImage: 0,
         attributes: [],
         prices: [],
+        inStock: null,
     }
 
     componentDidMount() {
-        this.getProdToState()
+        this.getProdToState();
+        this.props.changeCategory('');
     }
 
 
     getProdToState = async () => {
         this.setState({ loading: true })
         const product = await getProductByID(this.props.activeProd.id)
+
         if (product) {
             this.setState({
                 loading: product.loading,
                 product: product.data.product,
                 gallery: product.data.product.gallery,
                 attributes: product.data.product.attributes,
-                prices: product.data.product.prices
+                prices: product.data.product.prices,
+                inStock: product.data.product.inStock,
             })
         } else {
             this.setState({
@@ -47,7 +52,7 @@ class Pdp extends PureComponent {
     }
 
     render() {
-        const { error, loading, product, gallery, activeImage, attributes, prices } = this.state;
+        const { error, loading, product, gallery, activeImage, attributes, prices, inStock } = this.state;
 
         const processing = loading ? 'Loading' : null;
         const notAvailable = error ? 'Error' : null;
@@ -69,7 +74,7 @@ class Pdp extends PureComponent {
                         <div className="Pdp__chosenImg">
                             <img className='Pdp__img' src={gallery[activeImage]} alt={product.name} />
                         </div>
-                        <ProdDetails brand={product.brand} name={product.name} attr={attributes} descr={product.description} prices={prices} />
+                        <ProdDetails brand={product.brand} name={product.name} attr={attributes} descr={product.description} prices={prices} inStock={inStock} />
                     </div>
                     }
                 </Container>
@@ -79,19 +84,17 @@ class Pdp extends PureComponent {
     }
 }
 
-
-
-
 function mapStateToProps(state) {
     return {
         activeCurrency: state.activeCurrency,
-        activeProd: state.activeProd
+        activeProd: state.activeProd,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        changeProdId: (id) => dispatch(changeProdId(id))
+        changeProdId: (id) => dispatch(changeProdId(id)),
+        changeCategory: (name) => dispatch(changeCategory(name))
     }
 }
 

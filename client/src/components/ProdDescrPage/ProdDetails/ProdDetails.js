@@ -2,6 +2,8 @@ import { PureComponent } from 'react';
 import parse from 'html-react-parser'
 import { connect } from 'react-redux';
 import { addToCart } from '../../../redux/actions';
+import { removeFromCart } from '../../../redux/actions';
+import Attributes from './Attributes/Attributes';
 
 class ProdDetails extends PureComponent {
 
@@ -9,6 +11,7 @@ class ProdDetails extends PureComponent {
         amount: '',
         attrQty: 0,
         selectedAttributes: {},
+        filled: false,
         activeBtn: false
     }
 
@@ -21,22 +24,29 @@ class ProdDetails extends PureComponent {
         if (prevProps.activeCurrency.symblo !== this.props.activeCurrency.symbol) {
             this.getAmount();
         }
-        if (prevState.selectedAttributes !== this.state.selectedAttributes) {
+        if (prevState.filled !== this.state.filled) {
             this.getActiveBtn();
         }
     }
 
     addToSelectedAttributes = (key, value) => {
-        const { attrQty, selectedAttributes } = this.state;
         this.setState(({ selectedAttributes }) => ({
             selectedAttributes: { ...selectedAttributes, [key]: value }
         }))
-        if (attrQty === selectedAttributes.length) {
-            this.getActiveBtn();
+        this.compareLength();
+    }
+
+    getActiveBtn = () => {
+        if (this.props.inStock) {
+            this.setState({ activeBtn: true })
         }
     }
-    getActiveBtn = () => {
-        this.setState({ activeBtn: true })
+
+    compareLength = () => {
+        const { attrQty, selectedAttributes } = this.state;
+        if (attrQty === Object.keys(selectedAttributes).length + 1) {
+            this.setState({ filled: true })
+        }
     }
 
     getAttributesLength = () => {
@@ -52,12 +62,43 @@ class ProdDetails extends PureComponent {
         })
     }
 
+    handleClick = () => {
+        const { name, addToCart, cart, removeFromCart } = this.props;
+        const { selectedAttributes } = this.state;
+        const idx = this.testIfInCart(name, selectedAttributes)
+        // addToCart({ name: name, items: selectedAttributes, qty: 1 })
+        if (!idx) {
+            addToCart({ name: name, items: selectedAttributes, qty: 1 })
+        } else {
+            let newQty = cart.items[idx].qty + 1;
+            removeFromCart(idx);
+            addToCart({ name: name, items: selectedAttributes, qty: newQty })
+        }
+        console.log(cart.items);
+    }
+
+    testIfInCart = (name, items) => {
+        let itemIsInCart = false;
+        const arrayOfCart = this.props.cart.items;
+        let notYetInCart = JSON.stringify(items);
+
+        arrayOfCart.forEach((cartItem, idx) => {
+            if (cartItem.name === name) {
+                let inCart = JSON.stringify(cartItem.items);
+                if (inCart === notYetInCart) {
+                    itemIsInCart = idx;
+                }
+            }
+        })
+        return itemIsInCart
+    }
+
     render() {
-        const { brand, name, attr, descr, activeCurrency, addToCart } = this.props;
-        const { amount, activeBtn, selectedAttributes } = this.state;
+        const { brand, name, attr, descr, activeCurrency } = this.props;
+        const { amount, activeBtn } = this.state;
         const notFound = !(amount || activeCurrency.symbol) ? <div>Not found</div> : null;
         const price = !notFound ? <div className='Pdp__amount'>{activeCurrency.symbol}{amount}</div> : null;
-        // console.log(this.props);
+
         return (
             <div className='Pdp__details'>
                 <h3 className='Pdp__brand'>{brand}</h3>
@@ -72,7 +113,7 @@ class ProdDetails extends PureComponent {
                 <div className="Pdp__attrTitle">Price:</div>
                 {notFound}
                 {price}
-                <button type='button' disabled={!activeBtn} onClick={() => addToCart(selectedAttributes)}
+                <button type='button' disabled={!activeBtn} onClick={this.handleClick}
                     className={`Pdp__button ${activeBtn && 'activeBtn'}`}>add to card</button>
                 <div className='Pdp__descr'>{parse(`${descr}`)}</div>
             </div>
@@ -80,60 +121,9 @@ class ProdDetails extends PureComponent {
     }
 }
 
-class Attributes extends PureComponent {
-
-    state = {
-        selected: null,
-    }
-
-    onSelect = (value) => {
-        const { id, addToSelected } = this.props
-        if (this.state.selected === value) {
-            return
-        } else {
-            this.setState(({ selected }) => ({
-                selected: value
-            }))
-            addToSelected(id, value)
-        }
-    }
-
-    render() {
-        const { name, items, id } = this.props;
-        return (
-            <li className='Pdp__attribute'>
-                <div className='Pdp__attrTitle'>{name}:</div>
-                <ul className='Pdp__params'>
-                    {items.map((item, idx) => {
-                        return <Attribute key={idx} type={id} item={item.value}
-                            selected={this.state.selected} click={() => this.onSelect(item.value)} />
-                    })}
-                </ul>
-            </li>
-        )
-    }
-}
-
-class Attribute extends PureComponent {
 
 
-    render() {
-        const { type, item, selected, click } = this.props;
-        const other = type !== 'Color' ? 'other' : null;
-        const color = type === 'Color' ? 'Color' : null;
-        const bg = color ? item : '';
 
-        const active = selected === item && color ? 'activeCo' : '';
-        const activeOth = selected === item && other ? 'activeOth' : '';
-
-        return (
-            <li onClick={click} style={{ backgroundColor: bg }}
-                className={`Pdp__param-${color || other} ${active || activeOth}`}>
-                {other && item}
-            </li>
-        );
-    }
-}
 
 function mapStateToProps(state) {
     return {
@@ -144,7 +134,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        addToCart: (item) => dispatch(addToCart(item))
+        addToCart: (item) => dispatch(addToCart(item)),
+        removeFromCart: (idx) => dispatch(removeFromCart(idx))
     }
 }
 

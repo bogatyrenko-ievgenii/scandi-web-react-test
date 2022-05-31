@@ -6,7 +6,6 @@ import Pdp from "../ProdDescrPage/Pdp";
 
 import { Routes, Route } from 'react-router-dom'
 
-
 function App() {
     return <div className="App">
         {/* <React.StrictMode> */}

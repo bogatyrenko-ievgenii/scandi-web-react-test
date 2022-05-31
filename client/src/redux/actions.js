@@ -2,6 +2,7 @@ import { CHANGE_CATEGORY } from "./types";
 import { CHANGE_CURRENCY } from "./types";
 import { CHANGE_PROD_ID } from './types';
 import { ADD_TO_CART } from "./types";
+import { REMOVE_FROM_CART } from "./types";
 
 export function changeCategory(name) {
     return {
@@ -27,6 +28,13 @@ export function changeProdId(id) {
 export function addToCart(item) {
     return {
         type: ADD_TO_CART,
+        payload: item
+    }
+}
+
+export function removeFromCart(item) {
+    return {
+        type: REMOVE_FROM_CART,
         payload: item
     }
 }
