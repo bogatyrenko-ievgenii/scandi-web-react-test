@@ -6,9 +6,16 @@ export default onRequest(`query GetCategory{
       products {
        id
        name
+       brand
        inStock
        gallery
        category
+       attributes {
+        name
+        items {
+          value
+        }
+      }
        prices {
         currency {
           symbol

@@ -21,6 +21,7 @@ class Attributes extends PureComponent {
 
     render() {
         const { name, items, id } = this.props;
+
         return (
             <li className='Pdp__attribute'>
                 <div className='Pdp__attrTitle'>{name}:</div>

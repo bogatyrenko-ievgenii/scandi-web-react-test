@@ -1,7 +1,8 @@
 import { CHANGE_CURRENCY } from "./types";
 
 const getCurrencyFormLS = () => {
-    return localStorage.getItem('currency');
+    let currency = localStorage.getItem('currency');
+    return currency ? currency : '$';
 }
 
 const initialState = {

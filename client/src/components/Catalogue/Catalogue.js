@@ -18,6 +18,7 @@ class Catalogue extends PureComponent {
 
     componentDidMount() {
         this.getData();
+        this.switchCategory();
     }
 
     componentDidUpdate(prevProps) {

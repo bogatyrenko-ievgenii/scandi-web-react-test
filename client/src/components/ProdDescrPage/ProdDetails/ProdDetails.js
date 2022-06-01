@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { addToCart } from '../../../redux/actions';
 import { removeFromCart } from '../../../redux/actions';
 import Attributes from './Attributes/Attributes';
+import { testIfInCart } from '../../../reusedScripts/IfInCart';
+import { addCartToLS } from '../../../reusedScripts/addCartToLS';
 
 class ProdDetails extends PureComponent {
 
@@ -18,6 +20,10 @@ class ProdDetails extends PureComponent {
     componentDidMount() {
         this.getAmount();
         this.getAttributesLength();
+
+        if (this.props.attr.length === 0) {
+            this.getActiveBtn();
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -50,7 +56,10 @@ class ProdDetails extends PureComponent {
     }
 
     getAttributesLength = () => {
-        this.setState({ attrQty: this.props.attr.length })
+        const { attr } = this.props;
+        if (attr) {
+            this.setState({ attrQty: this.props.attr.length })
+        }
     }
 
     getAmount = () => {
@@ -65,32 +74,17 @@ class ProdDetails extends PureComponent {
     handleClick = () => {
         const { name, addToCart, cart, removeFromCart } = this.props;
         const { selectedAttributes } = this.state;
-        const idx = this.testIfInCart(name, selectedAttributes)
-        // addToCart({ name: name, items: selectedAttributes, qty: 1 })
-        if (!idx) {
+        const inCart = this.props.cart.items;
+        const idx = testIfInCart(name, selectedAttributes, inCart)
+
+        if (idx !== 0 && !idx) {
             addToCart({ name: name, items: selectedAttributes, qty: 1 })
         } else {
             let newQty = cart.items[idx].qty + 1;
             removeFromCart(idx);
             addToCart({ name: name, items: selectedAttributes, qty: newQty })
         }
-        console.log(cart.items);
-    }
-
-    testIfInCart = (name, items) => {
-        let itemIsInCart = false;
-        const arrayOfCart = this.props.cart.items;
-        let notYetInCart = JSON.stringify(items);
-
-        arrayOfCart.forEach((cartItem, idx) => {
-            if (cartItem.name === name) {
-                let inCart = JSON.stringify(cartItem.items);
-                if (inCart === notYetInCart) {
-                    itemIsInCart = idx;
-                }
-            }
-        })
-        return itemIsInCart
+        addCartToLS();
     }
 
     render() {
@@ -103,13 +97,13 @@ class ProdDetails extends PureComponent {
             <div className='Pdp__details'>
                 <h3 className='Pdp__brand'>{brand}</h3>
                 <div className='Pdp__name'>{name}</div>
-                <ul className='Pdp__attributes'>
+                {attr && <ul className='Pdp__attributes'>
                     {attr.map((prop) => {
                         return <Attributes key={prop.id} name={prop.name}
                             items={prop.items} id={prop.id}
                             addToSelected={this.addToSelectedAttributes} />
                     })}
-                </ul>
+                </ul>}
                 <div className="Pdp__attrTitle">Price:</div>
                 {notFound}
                 {price}

@@ -11,7 +11,7 @@ import { BrowserRouter } from 'react-router-dom'
 
 import './index.scss';
 
-const store = configureStore(
+export const store = configureStore(
     { reducer: rootreducer }
 )
 
