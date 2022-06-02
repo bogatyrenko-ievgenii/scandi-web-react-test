@@ -63,11 +63,11 @@ class CatalogueItem extends PureComponent {
         const idx = testIfInCart(product.name, defaultAttrs, cart.items)
 
         if (idx !== 0 && !idx) {
-            addToCart({ name: product.name, items: defaultAttrs, qty: 1 })
+            addToCart({ id: product.id, name: product.name, items: defaultAttrs, qty: 1 })
         } else {
             let newQty = cart.items[idx].qty + 1;
             removeFromCart(idx);
-            addToCart({ name: product.name, items: defaultAttrs, qty: newQty })
+            addToCart({ id: product.id, name: product.name, items: defaultAttrs, qty: newQty })
         }
         addCartToLS();
     }

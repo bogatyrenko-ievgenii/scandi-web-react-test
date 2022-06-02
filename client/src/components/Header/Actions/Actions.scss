@@ -5,6 +5,7 @@
     width: 205px;
     font-weight: 500;
     font-size: 18px;
+    position: relative;
     &__arrow {
         user-select: none;
         vertical-align: middle;
@@ -42,8 +43,8 @@
     padding: 10px 0;
     list-style-type: none;
     position: absolute;
-    top: 64px;
-    right: 250px;
+    top: 27px;
+    right: -28px;
     font-weight: 500;
     font-size: 18px;
     color: rgba(29, 31, 34, 1);
@@ -62,7 +63,7 @@
     }
 }
 
-.backDrop {
+.backDropCurrency {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -71,7 +72,7 @@
     z-index: 2;
 }
 
-.bagPreview {
+.backDropBag {
     position: fixed;
     top: 80px;
     left: 0;
@@ -79,10 +80,109 @@
     height: 100vh;
     background-color: rgba(57, 55, 72, 0.22);
     z-index: 2;
+}
+
+.bagPreview {
+    width: 352px;
+    background-color: rgba(255, 255, 255, 1);
+    position: absolute;
+    top: 52px;
+    right: -52px;
+    z-index: 3;
+    padding: 32px 16px 32px 16px;
+    &__buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+    &__button {
+        text-transform: uppercase;
+        border: none;
+        width: 140px;
+        height: 43px;
+        font-weight: 600;
+        font-size: 14px;
+        &-white {
+            background-color: rgba(255, 255, 255, 1);
+            border: 1px solid rgba(29, 31, 34, 1);
+            color: rgba(29, 31, 34, 1);
+        }
+        &-green {
+            background-color: rgba(94, 206, 123, 1);
+            color: rgba(255, 255, 255, 1);
+        }
+    }
+    &__totalPrice {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        color: rgba(29, 31, 34, 1);
+        font-size: 16px;
+        &-title {
+            font-family: "Roboto", sans-serif;
+            font-weight: 500;
+        }
+        &-amount {
+            font-weight: 700;
+        }
+    }
+    &__title {
+        margin-bottom: 32px;
+        font-size: 16px;
+        color: rgba(29, 31, 34, 1);
+        &-bold {
+            font-weight: 700;
+        }
+        &-medium {
+            font-weight: 500;
+        }
+    }
     &__list {
-        width: 352px;
-        background-color: rgba(255, 255, 255, 1);
-        position: absolute;
-        top: 0;
+        list-style-type: none;
+        width: 100%;
+    }
+}
+
+.BagItem {
+    margin-bottom: 40px;
+    font-size: 16px;
+    color: rgba(29, 31, 34, 1);
+    &__wrapper {
+        display: flex;
+        justify-content: space-between;
+    }
+    &__details {
+    }
+    &__imageBlock {
+        width: 121px;
+    }
+    &__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    &__counter {
+    }
+    &__brand {
+        font-weight: 300;
+        margin-bottom: 10px;
+    }
+    &__name {
+        font-weight: 300;
+        margin-bottom: 10px;
+    }
+    &__price {
+        font-weight: 500;
+    }
+    &__attrs {
+        list-style-type: none;
+    }
+    &__attr {
+    }
+    &__attrName {
+    }
+    &__attrItems {
+        list-style-type: none;
+    }
+    &__attrItem {
     }
 }

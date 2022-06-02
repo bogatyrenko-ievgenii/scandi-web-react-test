@@ -1,7 +1,7 @@
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Container from '../Container';
-import getCategory from '../../services/queries/category';
+import { getProductsByCategory } from '../../services/queries/category';
 import PropTypes from 'prop-types'
 import CatalogueItem from './CatalogueItem';
 
@@ -18,37 +18,24 @@ class Catalogue extends PureComponent {
 
     componentDidMount() {
         this.getData();
-        this.switchCategory();
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.activeCategory.name !== this.props.activeCategory.name) {
-            this.switchCategory()
-        }
-    }
-
-    switchCategory = async () => {
-        await this.getData();
-        if (this.props.activeCategory.name !== 'all') {
-            const products = this.state.products.filter((product) => {
-                return product.category === this.props.activeCategory.name
-                    ? product : null;
-            })
-            this.setState({ products: products })
+            this.getData();
         }
     }
 
     getData = () => {
         this.setState({ loading: true })
-        return getCategory
+        return getProductsByCategory(this.props.activeCategory.name)
             .then(response => {
                 this.setState({
-                    categoryName: response.data.category.name,
                     products: response.data.category.products,
                     loading: response.loading
                 })
-            }).catch((error) => {
-                this.setState({ error: error, loading: false })
+            }).catch(() => {
+                this.setState({ error: true, loading: false })
             })
     }
 
@@ -64,6 +51,7 @@ class Catalogue extends PureComponent {
         const title = !(loading || error || !activeCategory.name)
             ? <h1 className='Catalogue__title'>{this.makeCapitalLetter(activeCategory.name)}</h1>
             : null;
+
         return (
             <section className='Catalogue'>
                 <Container>
@@ -87,7 +75,7 @@ Catalogue.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        activeCategory: state.activeCategory
+        activeCategory: state.activeCategory,
     };
 }
 

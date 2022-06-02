@@ -29,22 +29,19 @@ class Pdp extends PureComponent {
 
     getProdToState = async () => {
         this.setState({ loading: true })
-        const product = await getProductByID(this.props.activeProd.id)
-
-        if (product) {
-            this.setState({
-                loading: product.loading,
-                product: product.data.product,
-                gallery: product.data.product.gallery,
-                attributes: product.data.product.attributes,
-                prices: product.data.product.prices,
-                inStock: product.data.product.inStock,
+        return await getProductByID(this.props.activeProd.id)
+            .then(response => {
+                this.setState({
+                    loading: response.loading,
+                    product: response.data.product,
+                    gallery: response.data.product.gallery,
+                    attributes: response.data.product.attributes,
+                    prices: response.data.product.prices,
+                    inStock: response.data.product.inStock,
+                })
+            }).catch(() => {
+                this.setState({ error: true })
             })
-        } else {
-            this.setState({
-                error: true
-            })
-        }
     }
 
     switchImage = (idx) => {
@@ -74,7 +71,8 @@ class Pdp extends PureComponent {
                         <div className="Pdp__chosenImg">
                             <img className='Pdp__img' src={gallery[activeImage]} alt={product.name} />
                         </div>
-                        <ProdDetails brand={product.brand} name={product.name} attr={attributes} descr={product.description} prices={prices} inStock={inStock} />
+                        <ProdDetails id={product.id} brand={product.brand} name={product.name}
+                            attr={attributes} descr={product.description} prices={prices} inStock={inStock} />
                     </div>
                     }
                 </Container>

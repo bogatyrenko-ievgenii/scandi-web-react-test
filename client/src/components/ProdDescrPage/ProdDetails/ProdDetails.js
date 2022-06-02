@@ -72,17 +72,17 @@ class ProdDetails extends PureComponent {
     }
 
     handleClick = () => {
-        const { name, addToCart, cart, removeFromCart } = this.props;
+        const { id, name, addToCart, cart, removeFromCart } = this.props;
         const { selectedAttributes } = this.state;
         const inCart = this.props.cart.items;
         const idx = testIfInCart(name, selectedAttributes, inCart)
 
         if (idx !== 0 && !idx) {
-            addToCart({ name: name, items: selectedAttributes, qty: 1 })
+            addToCart({ id: id, name: name, items: selectedAttributes, qty: 1 })
         } else {
             let newQty = cart.items[idx].qty + 1;
             removeFromCart(idx);
-            addToCart({ name: name, items: selectedAttributes, qty: newQty })
+            addToCart({ id: id, name: name, items: selectedAttributes, qty: newQty })
         }
         addCartToLS();
     }

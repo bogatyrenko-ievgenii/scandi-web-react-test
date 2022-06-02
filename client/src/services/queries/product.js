@@ -27,7 +27,5 @@ export const getProductByID = async (id) => {
       }
       brand
     }
-  }`).catch(() => {
-    return false
-  })
+  }`)
 }

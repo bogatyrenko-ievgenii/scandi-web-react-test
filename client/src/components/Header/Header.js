@@ -61,7 +61,7 @@ class Header extends PureComponent {
         const viewNav = !(error || loading || !categories) ? <Nav categories={categories} /> : null;
         const viewIcon = !(error || loading) ? <img src={logo} alt="logo" /> : null;
         const viewActions = !(error || loading || !currentCurrency || !viewIcon)
-            ? <Actions current={currentCurrency} currencies={currencies} change={this.changeCurrentCurrency} />
+            ? <Actions currentCurrency={currentCurrency} currencies={currencies} change={this.changeCurrentCurrency} />
             : null;
 
         return (

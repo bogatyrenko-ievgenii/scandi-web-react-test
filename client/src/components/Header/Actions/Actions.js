@@ -2,6 +2,7 @@ import { PureComponent } from 'react';
 import CurrenciesItem from './CurrenciesItem';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
+import BagItem from './BagItem/BagItem';
 
 import './Actions.scss';
 import arrow from './Icons/arrow.svg';
@@ -46,20 +47,18 @@ class Actions extends PureComponent {
     }
 
     render() {
-        const { current, currencies, change, cart, activeCurrency } = this.props;
+        const { currentCurrency, currencies, change, cart } = this.props;
         const { openSelect, count } = this.state;
-        console.log(cart);
+
         return (
-            <>
-                <div className='Actions' >
-                    <div onClick={this.onOpenSelect} className="Actions__currencies">
-                        {current} <img className='Actions__arrow' src={arrow} alt="v" />
-                    </div>
-                    <div onClick={this.showCart} className='Actions__cart'><img className='Actions__image' src={cartImg} alt="cart" />
-                        {count && <span className='Actions__qty'>{count}</span>}
-                    </div>
+            <div className='Actions' >
+                <div onClick={this.onOpenSelect} className="Actions__currencies">
+                    {currentCurrency} <img className='Actions__arrow' src={arrow} alt="v" />
                 </div>
-                {openSelect && <div onClick={this.onOpenSelect} className="backDrop"></div>}
+                <div onClick={this.showCart} className='Actions__cart'><img className='Actions__image' src={cartImg} alt="cart" />
+                    {count && <span className='Actions__qty'>{count}</span>}
+                </div>
+                {openSelect && <div onClick={this.onOpenSelect} className="backDropCurrency"></div>}
                 <ul className='Currencies'>
                     {currencies.map((currency, idx) => {
                         return openSelect
@@ -68,13 +67,21 @@ class Actions extends PureComponent {
                             : null;
                     })}
                 </ul>
-                <div className='bagPreview'>
+                <div className='backDropBag'></div>
+                <div className="bagPreview">
+                    <div className="bagPreview__title"><span className='bagPreview__title-bold'>My Bag, </span><span className='bagPreview__title-medium'>3 items</span></div>
                     <ul className='bagPreview__list'>
-
+                        {cart.items.map((item, idx) => {
+                            return <BagItem key={idx} product={item} currentCurrency={currentCurrency} />
+                        })}
                     </ul>
-
+                    <div className="bagPreview__totalPrice"><span className='bagPreview__totalPrice-title'>Total</span><span className='bagPreview__totalPrice-amount'>$200</span></div>
+                    <div className="bagPreview__buttons">
+                        <button className='bagPreview__button bagPreview__button-white' type='button'>view bag</button>
+                        <button className='bagPreview__button bagPreview__button-green' type='button'>check out</button>
+                    </div>
                 </div>
-            </>
+            </div>
         );
     }
 }
@@ -82,12 +89,13 @@ class Actions extends PureComponent {
 function mapStateToProps(state) {
     return {
         cart: state.cart,
-        activeCurrency: state.activeCurrency
     }
 }
 
 Actions.propTypes = {
-    current: PropTypes.string.isRequired,
+    currentCurrency: PropTypes.string.isRequired,
     currencies: PropTypes.array.isRequired,
 }
+
+
 export default connect(mapStateToProps)(Actions);
