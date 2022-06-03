@@ -14,6 +14,7 @@ class Actions extends PureComponent {
         openSelect: false,
         openBagPreview: false,
         count: null,
+        totalCount: 0
     }
 
     componentDidMount() {
@@ -24,11 +25,25 @@ class Actions extends PureComponent {
         if (prevProps.cart !== this.props.cart) {
             this.getCountItemsInCart();
         }
+        if (prevProps.activeCategory.name !== this.props.activeCategory.name && this.state.openBagPreview) {
+            this.setState({ openBagPreview: false })
+        }
     }
 
-    onOpenSelect = () => {
+    showSelect = () => {
         this.setState(({ openSelect }) => ({
             openSelect: !openSelect
+        }))
+        if (this.state.openBagPreview) {
+            this.setState({
+                openBagPreview: false
+            })
+        }
+    }
+
+    showBagPreview = () => {
+        this.setState(({ openBagPreview }) => ({
+            openBagPreview: !openBagPreview
         }))
     }
 
@@ -42,45 +57,53 @@ class Actions extends PureComponent {
         }
     }
 
-    showCart = () => {
-
+    getTotalCount = (amount) => {
+        this.setState(({ totalCount }) => ({
+            totalCount: totalCount + amount
+        }))
     }
+
 
     render() {
         const { currentCurrency, currencies, change, cart } = this.props;
-        const { openSelect, count } = this.state;
+        const { openSelect, openBagPreview, count, totalCount } = this.state;
 
         return (
             <div className='Actions' >
-                <div onClick={this.onOpenSelect} className="Actions__currencies">
+                <div onClick={this.showSelect} className="Actions__currencies">
                     {currentCurrency} <img className='Actions__arrow' src={arrow} alt="v" />
                 </div>
-                <div onClick={this.showCart} className='Actions__cart'><img className='Actions__image' src={cartImg} alt="cart" />
+                <div onClick={this.showBagPreview} className='Actions__cart'><img className='Actions__image' src={cartImg} alt="cart" />
                     {count && <span className='Actions__qty'>{count}</span>}
                 </div>
-                {openSelect && <div onClick={this.onOpenSelect} className="backDropCurrency"></div>}
+                {openSelect && <div onClick={this.showSelect} className="backDropCurrency"></div>}
                 <ul className='Currencies'>
                     {currencies.map((currency, idx) => {
                         return openSelect
                             ? <CurrenciesItem key={idx} currency={currency}
-                                change={change} close={this.onOpenSelect} />
+                                change={change} close={this.showSelect} />
                             : null;
                     })}
                 </ul>
-                <div className='backDropBag'></div>
-                <div className="bagPreview">
-                    <div className="bagPreview__title"><span className='bagPreview__title-bold'>My Bag, </span><span className='bagPreview__title-medium'>3 items</span></div>
+
+                {openBagPreview && <div onClick={this.showBagPreview} className='backDropBag'></div>}
+                {openBagPreview && <div className="bagPreview">
+                    <div className="bagPreview__title"><span className='bagPreview__title-bold'>My Bag, </span><span className='bagPreview__title-medium'>{count} items</span></div>
                     <ul className='bagPreview__list'>
                         {cart.items.map((item, idx) => {
-                            return <BagItem key={idx} product={item} currentCurrency={currentCurrency} />
+                            return <BagItem key={idx} product={item} prodFromRedux={cart.items[idx]}
+                                currentCurrency={currentCurrency} getTotalCount={this.getTotalCount} />
                         })}
                     </ul>
-                    <div className="bagPreview__totalPrice"><span className='bagPreview__totalPrice-title'>Total</span><span className='bagPreview__totalPrice-amount'>$200</span></div>
+                    <div className="bagPreview__totalPrice">
+                        <span className='bagPreview__totalPrice-title'>Total</span>
+                        <span className='bagPreview__totalPrice-amount'>{currentCurrency}{totalCount.toFixed(2)}</span>
+                    </div>
                     <div className="bagPreview__buttons">
                         <button className='bagPreview__button bagPreview__button-white' type='button'>view bag</button>
                         <button className='bagPreview__button bagPreview__button-green' type='button'>check out</button>
                     </div>
-                </div>
+                </div>}
             </div>
         );
     }
@@ -89,6 +112,7 @@ class Actions extends PureComponent {
 function mapStateToProps(state) {
     return {
         cart: state.cart,
+        activeCategory: state.activeCategory
     }
 }
 
