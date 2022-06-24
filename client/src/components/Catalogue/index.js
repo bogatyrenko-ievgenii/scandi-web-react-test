@@ -1,1 +1,1 @@
-export { default } from 'Catalogue'
+export { default } from './Catalogue'

@@ -1,5 +1,10 @@
 import { PureComponent } from "react";
-import { getProductByID } from '../../../../services/queries/product';
+import { connect } from "react-redux";
+
+import * as actions from '../../../../redux/actions';
+import { getProductByID } from '../../../../graphql/queries/getProductByID';
+import Attributes from "../../../Attributes";
+import Spinner from "../../../Spinner";
 
 
 class BagItem extends PureComponent {
@@ -10,27 +15,27 @@ class BagItem extends PureComponent {
         name: null,
         image: null,
         attributes: [],
-        prices: [],
         amount: 0,
-        selected: 0
+        selected: 0,
     }
 
     componentDidMount() {
         this.getData();
+        this.getAmount();
     }
 
-    componentDidUpdate(prevState) {
-        if (prevState.prices !== this.state.prices) {
-            this.getPrice();
-        }
-        if (prevState.amount !== this.state.amount) {
-            this.props.getTotalCount(this.state.amount * this.props.prodFromRedux.qty)
+    componentDidUpdate(prevProps) {
+        const { activePrice, qty } = this.props.product;
+
+        if (prevProps.product.activePrice !== activePrice
+            || prevProps.product.qty !== qty) {
+            this.getAmount();
         }
     }
 
-    getData = () => {
+    getData = async () => {
         this.setState({ loading: true })
-        return getProductByID(this.props.product.id)
+        await getProductByID(this.props.product.prodId)
             .then(response => {
                 const product = response.data.product;
                 this.setState({
@@ -39,20 +44,16 @@ class BagItem extends PureComponent {
                     name: product.name,
                     image: product.gallery[0],
                     attributes: product.attributes,
-                    prices: product.prices,
                 })
             }).catch(() => {
-                this.setState({ error: true, loading: false })
+                this.setState({ error: 'Product was not founded..', loading: false })
             })
     }
 
-    getPrice = () => {
-        let currency = this.props.currentCurrency;
-        this.state.prices.forEach(price => {
-            if (price.currency.symbol === currency) {
-                this.setState({ amount: price.amount })
-            }
-        })
+    getAmount = () => {
+        const { product } = this.props;
+        this.setState({ amount: 0 });
+        this.setState({ amount: product.activePrice * product.qty })
     }
 
     setSelected = (idx) => {
@@ -62,61 +63,45 @@ class BagItem extends PureComponent {
     }
 
     render() {
-        const { brand, name, image, attributes, amount, loading, error, selected } = this.state;
-        const { currentCurrency, prodFromRedux } = this.props;
+        const { brand, name, image, attributes, amount, loading, error } = this.state;
+        const { activeCurrency, decrQtyCartItem, incrQtyCartItem, product } = this.props;
 
-        const processing = loading ? 'Loading' : null;
-        const NotFound = error ? 'Product not found' : null;
-        const product = !(loading || error) ? true : null;
-
-        const itemsAmount = prodFromRedux.qty * amount;
+        const processing = loading ? <Spinner size={100} /> : null;
+        const NotFound = error ? <div style={{ margin: '20px' }}>{error}</div> : null;
+        const bagItem = !(loading || error) ? true : null;
 
         return (
             <>
                 {processing}
                 {NotFound}
-                {product &&
+                {bagItem &&
                     <li className='BagItem'>
                         <div className="BagItem__wrapper">
                             <div className="BagItem__details">
                                 <h3 className="BagItem__brand">{brand}</h3>
                                 <div className="BagItem__name">{name}</div>
                                 {amount && <div className="BagItem__price">
-                                    {currentCurrency}{itemsAmount.toFixed(2)}
+                                    {activeCurrency}{amount.toFixed(2)}
                                 </div>}
                                 <ul className="BagItem__attrs">
                                     {attributes.map((attribute, idx) => {
-                                        return <li key={idx} className="BagItem__attr">
-                                            <div className="BagItem__attrName">{attribute.name}:</div>
-                                            <ul className="BagItem__attrItems">
-                                                {attribute.items.map((item, idx) => {
-                                                    const color = attribute.name === 'Color' ? 'color' : '';
-                                                    const other = attribute.name !== 'Color' ? 'other' : '';
-                                                    const bg = color ? item.value : '';
-                                                    const activeColor = color && selected === idx ? 'activeColor' : '';
-                                                    const activeOther = other && selected === idx ? 'activeOther' : '';
-                                                    return <li onClick={() => this.setSelected(idx)} key={idx}
-                                                        className={`BagItem__attrItem ${color || other} ${activeColor || activeOther}`}
-                                                        style={{ backgroundColor: bg }}
-                                                    >
-                                                        {other && item.value}
-                                                    </li>
-                                                }
-                                                )}
-                                            </ul>
-                                        </li>
+                                        return <Attributes key={idx} name={attribute.name}
+                                            items={attribute.items} blockName='BagItem' defaultAttributes={product.items}
+                                            addToSelected={() => console.log('addToSelected')}
+                                        />
                                     })}
                                 </ul>
                             </div>
 
                             <div className="BagItem__wrapper-inner">
                                 <div className="BagItem__counter">
-                                    <div className="BagItem__operator BagItem__operator-incr"></div>
-                                    {prodFromRedux.qty}
-                                    <div className="BagItem__operator BagItem__operator-decr"></div>
+                                    <button id={product.id} className="BagItem__operator BagItem__operator-incr" onClick={() => incrQtyCartItem(product.id)}></button>
+                                    {product.qty}
+                                    <button id={product.id} className="BagItem__operator BagItem__operator-decr" onClick={() => decrQtyCartItem(product.id)}></button>
                                 </div>
                                 <img className="BagItem__image" src={image} alt={name} />
                             </div>
+
                         </div>
                     </li>
                 }
@@ -124,4 +109,12 @@ class BagItem extends PureComponent {
     }
 }
 
-export default BagItem;
+function mapStateToProps(state) {
+    return {
+        cart: state.cart.items,
+        activeCurrency: state.activeCurrency.symbol
+    }
+}
+
+
+export default connect(mapStateToProps, actions)(BagItem);

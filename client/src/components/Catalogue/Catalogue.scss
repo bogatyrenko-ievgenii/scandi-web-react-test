@@ -19,7 +19,6 @@
         padding: 16px;
         height: 444px;
         position: relative;
-        // z-index: 2;
         &:hover {
             box-shadow: 0px 0px 15px rgb(230, 231, 231);
         }
@@ -69,7 +68,6 @@
         right: 31px;
         bottom: 72px;
         cursor: pointer;
-        // z-index: 3;
     }
     .show {
         display: flex;

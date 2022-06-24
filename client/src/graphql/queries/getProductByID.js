@@ -1,7 +1,8 @@
 import onRequest from "../request";
 
 export const getProductByID = async (id) => {
-  return await onRequest(`query GetProd {
+  return await onRequest(`
+  query GetProd {
     product (id: "${id}"){
       id
       name
@@ -10,7 +11,6 @@ export const getProductByID = async (id) => {
       description
       category
       attributes {
-        id
         name
         type
         items {

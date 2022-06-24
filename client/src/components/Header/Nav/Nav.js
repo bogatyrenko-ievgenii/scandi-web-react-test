@@ -6,10 +6,6 @@ import { changeCategory } from '../../../redux/actions';
 import './Nav.scss';
 
 const Nav = ({ categories, activeCategory, changeCategory }) => {
-    const setCategory = (event) => {
-        let text = event.target.textContent;
-        changeCategory(text);
-    }
 
     const setLinkTo = (name) => {
         return name === 'all' ? '' : name;
@@ -19,14 +15,21 @@ const Nav = ({ categories, activeCategory, changeCategory }) => {
         <nav>
             <ul className='Nav'>
                 {categories.map((category, idx) => {
-                    let active = activeCategory.name === category.name
+                    const { name } = category;
+
+                    let active = activeCategory.name === name
                         ? 'active'
                         : null;
+
+                    let link = setLinkTo(name)
+
                     return <li
-                        key={idx}
-                        onClick={setCategory}
+                        key={name + idx}
+                        onClick={() => changeCategory(name)}
                         className={`Nav__item ${active}`}
-                    ><Link className='Nav__link' to={setLinkTo(category.name)}>{category.name}</Link>
+                    >
+                        <Link className='Nav__link'
+                            to={link}>{name}</Link>
                     </li>
                 })}
             </ul>

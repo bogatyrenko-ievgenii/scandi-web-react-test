@@ -1,47 +1,49 @@
 import { PureComponent } from "react";
 import { connect } from "react-redux";
 
-import { changeCurrency } from "../../../../redux/actions";
+import { changeCurrency, fetchPrices } from "../../../../redux/actions";
+// import * as actions from '../../../../redux/actions';
 
-
-class Currencies extends PureComponent {
+class CurrenciesItem extends PureComponent {
 
     state = {
         mouseOverStyle: ''
     }
 
     handleClick = (value) => {
-        const { change, close, changeCurrency, currency } = this.props;
-        change(value);
-        close();
-        changeCurrency(currency.symbol);
+        const { close, changeCurrency, currency: { symbol }, fetchPrices } = this.props;
+        changeCurrency(symbol);
+        fetchPrices(symbol);
         localStorage.setItem('currency', value)
+        close();
     }
 
     onEnter = () => this.setState({ mouseOverStyle: 'active' });
     onExit = () => this.setState({ mouseOverStyle: '' });
 
     render() {
-        const { currency } = this.props;
+
+        const { currency: { symbol, label } } = this.props;
         return (
             <li
-                onClick={(event) => this.handleClick(currency.symbol)}
+                onClick={() => this.handleClick(symbol)}
                 className={`Currencies__item ${this.state.mouseOverStyle}`}
-            ><span onMouseOver={this.onEnter} onMouseOut={this.onExit}>{currency.symbol} {currency.label}</span>
+            ><span onMouseOver={this.onEnter} onMouseOut={this.onExit}>{symbol} {label}</span>
             </li>
         )
     }
 }
 
 function mapStateToProps(state) {
-    return {
-        activeCurrency: state.activeCurrency
-    }
+    return { state }
 }
 
 function mapDispatchToProps(dispatch) {
-    return { changeCurrency: (symbol) => dispatch(changeCurrency(symbol)) }
+    return {
+        changeCurrency: (symbol) => dispatch(changeCurrency(symbol)),
+        fetchPrices: (symbol) => dispatch(fetchPrices(symbol))
+    }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Currencies);
+export default connect(mapStateToProps, mapDispatchToProps)(CurrenciesItem);

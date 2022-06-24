@@ -2,18 +2,19 @@ import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+
 import { changeProdId } from '../../../redux/actions';
-import { testIfInCart } from '../../../reusedScripts/IfInCart';
 import { addToCart } from '../../../redux/actions';
 import { removeFromCart } from '../../../redux/actions';
-import { addCartToLS } from '../../../reusedScripts/addCartToLS';
+import { testIfInCart } from '../../../reusedScripts/IfInCart';
 
-import cartIcon from './../icons/Vector.svg'
+import cartIcon from '../icons/Vector.svg'
+import { nanoid } from '@reduxjs/toolkit';
 
 class CatalogueItem extends PureComponent {
+
     state = {
         showBtn: false,
-        symbol: '',
         amount: null
     }
 
@@ -22,18 +23,18 @@ class CatalogueItem extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.activeCurrency.symbol !== this.props.symbol) {
+        if (prevProps.activeCurrency.symbol !== this.props.activeCurrency.symbol) {
             this.changeCurrency()
         }
     }
 
     changeCurrency = () => {
-        const { product, activeCurrency } = this.props;
+        const { product, activeCurrency: { symbol } } = this.props;
         const { prices } = product;
-        const { symbol } = activeCurrency;
+
         prices.forEach((price) => {
             if (price.currency.symbol === symbol) {
-                this.setState({ symbol: symbol, amount: price.amount })
+                this.setState({ amount: price.amount })
             }
         })
     }
@@ -57,19 +58,28 @@ class CatalogueItem extends PureComponent {
         this.setState({ showBtn: false })
     }
 
-    handleClick = () => {
+    onHandleClick = () => {
         const { product, cart, addToCart, removeFromCart } = this.props;
         const defaultAttrs = this.createDefaultAttrs();
         const idx = testIfInCart(product.name, defaultAttrs, cart.items)
 
         if (idx !== 0 && !idx) {
-            addToCart({ id: product.id, name: product.name, items: defaultAttrs, qty: 1 })
+            addToCart({
+                id: nanoid(),
+                prodId: product.id,
+                name: product.name,
+                items: defaultAttrs,
+                qty: 1, activePrice:
+                    this.state.amount
+            })
         } else {
             let newQty = cart.items[idx].qty + 1;
+            const item = cart.items[idx];
             removeFromCart(idx);
-            addToCart({ id: product.id, name: product.name, items: defaultAttrs, qty: newQty })
+            addToCart({
+                ...item, qty: newQty
+            })
         }
-        addCartToLS();
     }
 
     createDefaultAttrs = () => {
@@ -78,31 +88,31 @@ class CatalogueItem extends PureComponent {
 
         if (attributes) {
             attributes.forEach(item => {
-                defaultAttrs[`${item.name}`] = item.items[0].value
+                defaultAttrs[item.name] = item.items[0].value
             })
         }
         return defaultAttrs
     }
 
     render() {
-        const { product } = this.props;
-        const { showBtn, symbol, amount } = this.state;
+        const { product: { inStock, id, gallery, name, brand, }, activeCurrency: { symbol } } = this.props;
+        const { showBtn, amount } = this.state;
 
-        const outOfStock = !product.inStock;
+        const outOfStock = !inStock;
         const classOutOfStock = outOfStock ? 'disabled' : '';
         const show = showBtn ? 'show' : '';
 
         return <li
-            disabled={outOfStock} onMouseEnter={() => this.showBtn(classOutOfStock)}
+            disabled={!!outOfStock} onMouseEnter={() => this.showBtn(classOutOfStock)}
             onMouseLeave={this.hideBtn} className={`Catalogue__item ${classOutOfStock}`}
         >
-            <Link onClick={() => this.addToStorage(product.id)} to={`/product?id=${product.id}`}>
-                <img className='Catalogue__image' src={product.gallery[0]} alt={product.name} />
-                <div className='Catalogue__name'>{product.brand} {product.name}</div>
+            <Link onClick={() => this.addToStorage(id)} to={`/product?id=${id}`}>
+                <img className='Catalogue__image' src={gallery[0]} alt={name} />
+                <div className='Catalogue__name'>{brand} {name}</div>
                 <div className='Catalogue__price'>{symbol} {amount}</div>
                 {outOfStock && <div className="Catalogue__outOfStock">out of stock</div>}
             </Link>
-            <div onClick={this.handleClick} className={`Catalogue__addToCart ${show}`}>
+            <div onClick={this.onHandleClick} className={`Catalogue__addToCart ${show}`}>
                 <img className='Catalogue__icon' src={cartIcon} alt="cart" />
             </div>
         </li>
@@ -112,7 +122,6 @@ class CatalogueItem extends PureComponent {
 function mapStateToProps(state) {
     return {
         activeCurrency: state.activeCurrency,
-        activeProd: state.activeProd,
         cart: state.cart
     }
 }

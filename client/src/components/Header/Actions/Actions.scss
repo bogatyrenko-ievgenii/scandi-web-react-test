@@ -95,6 +95,7 @@
         justify-content: space-between;
     }
     &__button {
+        cursor: pointer;
         text-transform: uppercase;
         border: none;
         width: 140px;
@@ -154,14 +155,7 @@
             display: flex;
         }
     }
-    &__details {
-    }
-    // &__imageBlock {
-    //     width: 121px;
-    //     display: flex;
-    // }
     &__image {
-        // width: 100%;
         width: 121px;
         height: 100%;
         object-fit: cover;
@@ -178,10 +172,8 @@
         height: 24px;
         border: 1px solid rgba(29, 31, 34, 1);
         position: relative;
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
-        // font-size: 22px;
+        cursor: pointer;
+        background-color: #fff;
         &-incr {
             &::before {
                 content: "";
@@ -242,12 +234,16 @@
         list-style-type: none;
         display: flex;
         margin-bottom: 10px;
-        .color {
+    }
+    &__param {
+        &-color {
             width: 16px;
             height: 16px;
             margin-right: 8px;
+            cursor: pointer;
         }
-        .other {
+        &-other {
+            font-family: "Source Sans Pro", sans-serif;
             padding: 4px;
             font-weight: 400;
             font-size: 14px;
@@ -258,8 +254,23 @@
             justify-content: center;
             align-items: center;
             margin-right: 8px;
+            cursor: pointer;
         }
     }
-    &__attrItem {
+    .activeOth {
+        color: rgba(255, 255, 255, 1);
+        background-color: rgba(29, 31, 34, 1);
+    }
+    .activeCo {
+        position: relative;
+        &::before {
+            content: "";
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(94, 206, 123, 1);
+            position: absolute;
+            left: -2px;
+            top: -2px;
+        }
     }
 }

@@ -1,17 +1,21 @@
 import { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import { changeCurrency } from '../../redux/actions';
+import getNavigation from '../../graphql/queries/getNav';
+import getCurrencies from '../../graphql/queries/getCurrency';
+
 import Nav from './Nav';
 import Container from '../Container';
 import Actions from './Actions';
+import Spinner from '../Spinner';
 
-import getNavigation from '../../services/queries/nav';
-import getCurrencies from '../../services/queries/currency';
+
 import logo from './icons/a-logo.svg';
 import './Header.scss';
 
 
 class Header extends PureComponent {
     state = {
-        currentCurrency: '',
         currencies: [],
         categories: [],
         loading: true,
@@ -19,15 +23,17 @@ class Header extends PureComponent {
     };
 
     componentDidMount() {
-        this.onGetNavigation();
-        this.onGetCurrencies(this.getCurrencyFormLS());
+        this.handleGetNavigation();
+        // this.handleGetCurrencies();
     }
 
-    getCurrencyFormLS = () => {
-        return localStorage.getItem('currency');
-    }
+    // componentDidUpdate(prevProps) {
+    //     if (prevProps.activeCurrency.symbol !== this.props.activeCurrency.symbol) {
+    //         this.changeCurrentCurrency()
+    //     }
+    // }
 
-    onGetNavigation = () => {
+    handleGetNavigation = () => {
         getNavigation
             .then(response => {
                 this.setState({
@@ -37,32 +43,30 @@ class Header extends PureComponent {
             }).catch(() => this.setState({ error: true }))
     }
 
-    onGetCurrencies = (currency) => {
+    handleGetCurrencies = () => {
         getCurrencies
             .then(response => {
                 this.setState({
                     currencies: response.data.currencies,
-                    currentCurrency: currency || response.data.currencies[0].symbol,
+                    currentCurrency: response.data.currencies[0].symbol,
                     loading: response.loading
                 })
             }).catch(() => this.setState({ error: true }))
     }
 
-    changeCurrentCurrency = (value) => {
-        this.setState(({ currentCurrency }) => ({
-            currentCurrency: value
-        }))
-    }
+    // changeCurrentCurrency = () => {
+    //     this.setState({
+    //         currentCurrency: this.props.activeCurrency.symbol
+    //     })
+    // }
 
     render() {
-        const { currencies, currentCurrency, categories, loading, error } = this.state;
+
+        const { categories, loading, error } = this.state;
         const notAvailable = error ? 'Navbar is not available' : null;
-        const processing = loading ? 'Loading...' : null;
+        const processing = loading ? <Spinner size={50} /> : null;
         const viewNav = !(error || loading || !categories) ? <Nav categories={categories} /> : null;
-        const viewIcon = !(error || loading) ? <img src={logo} alt="logo" /> : null;
-        const viewActions = !(error || loading || !currentCurrency || !viewIcon)
-            ? <Actions currentCurrency={currentCurrency} currencies={currencies} change={this.changeCurrentCurrency} />
-            : null;
+        const logotype = <img src={logo} alt="logo" />;
 
         return (
             <header className='Header'>
@@ -70,12 +74,24 @@ class Header extends PureComponent {
                     {processing}
                     {notAvailable}
                     {viewNav}
-                    {viewIcon}
-                    {viewActions}
+                    {viewNav && logotype}
+                    {viewNav && <Actions />}
                 </Container>
             </header>
         )
     }
 }
 
-export default Header;
+function mapStateToProps(state) {
+    return {
+        activeCurrency: state.activeCurrency
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        changeCurrency: (symbol) => dispatch(changeCurrency(symbol))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -1,12 +1,14 @@
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import Container from '../Container';
-import { getProductsByCategory } from '../../services/queries/category';
-import PropTypes from 'prop-types'
+import Spinner from '../Spinner';
+import ErrorIndicator from '../ErrorIndicator';
 import CatalogueItem from './CatalogueItem';
+import { getProductsByCategory } from '../../graphql/queries/getProductsByCategory';
 
 import './Catalogue.scss';
-
 
 class Catalogue extends PureComponent {
 
@@ -46,25 +48,25 @@ class Catalogue extends PureComponent {
     render() {
         const { activeCategory } = this.props;
         const { error, loading, products } = this.state
-        const notAvailable = error ? 'Sorry, something went wrong' : null;
-        const processing = loading ? 'Loading...' : null;
+        const notAvailable = error ? <ErrorIndicator /> : null;
+        const processing = loading ? <Spinner size={100} /> : null;
         const title = !(loading || error || !activeCategory.name)
             ? <h1 className='Catalogue__title'>{this.makeCapitalLetter(activeCategory.name)}</h1>
             : null;
 
         return (
-            <section className='Catalogue'>
+            <main className='Catalogue'>
                 <Container>
                     {notAvailable}
                     {processing}
                     {title}
                     {title && <ul className='Catalogue__list'>
                         {products.map((product, idx) => {
-                            return <CatalogueItem key={idx} product={product} />
+                            return <CatalogueItem key={product.id + idx} product={product} />
                         })}
                     </ul>}
                 </Container>
-            </section >
+            </main>
         );
     }
 }

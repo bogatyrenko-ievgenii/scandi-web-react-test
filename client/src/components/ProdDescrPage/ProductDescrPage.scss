@@ -3,7 +3,6 @@
     &__wrapper {
         display: flex;
         flex-direction: row;
-        // justify-content: space-between;
     }
     &__list {
         list-style-type: none;
@@ -41,21 +40,19 @@
     &__attributes {
         list-style-type: none;
     }
-    &__attribute {
-    }
-    &__attrTitle {
+
+    &__attrName {
         font-weight: 700;
         font-size: 18px;
         font-family: "Roboto Condensed", sans-serif;
         margin-bottom: 10px;
         text-transform: uppercase;
     }
-    &__params {
+    &__attrItems {
         display: flex;
         flex-direction: row;
         margin-bottom: 24px;
         list-style-type: none;
-        // position: relative;
     }
     &__param {
         &-other {
@@ -71,7 +68,7 @@
             font-family: "Source Sans Pro", sans-serif;
             font-size: 18px;
         }
-        &-Color {
+        &-color {
             margin-right: 10px;
             cursor: pointer;
             width: 32px;

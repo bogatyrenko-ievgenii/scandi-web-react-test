@@ -1,1 +1,1 @@
-export { default } from './Pdp';
+export { default } from './ProductDescrPage';

@@ -1,11 +1,11 @@
 import { PureComponent } from 'react';
-import parse from 'html-react-parser'
+import parse from 'html-react-parser';
 import { connect } from 'react-redux';
 import { addToCart } from '../../../redux/actions';
 import { removeFromCart } from '../../../redux/actions';
-import Attributes from './Attributes/Attributes';
+import Attributes from '../../Attributes/Attributes';
 import { testIfInCart } from '../../../reusedScripts/IfInCart';
-import { addCartToLS } from '../../../reusedScripts/addCartToLS';
+import { nanoid } from '@reduxjs/toolkit';
 
 class ProdDetails extends PureComponent {
 
@@ -27,19 +27,21 @@ class ProdDetails extends PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.activeCurrency.symblo !== this.props.activeCurrency.symbol) {
+        if (prevProps.activeCurrency.symbol !== this.props.activeCurrency.symbol) {
             this.getAmount();
         }
         if (prevState.filled !== this.state.filled) {
             this.getActiveBtn();
         }
+        if (prevState.selectedAttributes !== this.state.selectedAttributes) {
+            this.compareLength();
+        }
     }
 
     addToSelectedAttributes = (key, value) => {
-        this.setState(({ selectedAttributes }) => ({
-            selectedAttributes: { ...selectedAttributes, [key]: value }
-        }))
-        this.compareLength();
+        this.setState({
+            selectedAttributes: { ...this.state.selectedAttributes, [key]: value }
+        })
     }
 
     getActiveBtn = () => {
@@ -50,7 +52,9 @@ class ProdDetails extends PureComponent {
 
     compareLength = () => {
         const { attrQty, selectedAttributes } = this.state;
-        if (attrQty === Object.keys(selectedAttributes).length + 1) {
+        const keys = Object.keys(selectedAttributes);
+
+        if (attrQty === keys.length) {
             this.setState({ filled: true })
         }
     }
@@ -71,43 +75,43 @@ class ProdDetails extends PureComponent {
         })
     }
 
-    handleClick = () => {
-        const { id, name, addToCart, cart, removeFromCart } = this.props;
-        const { selectedAttributes } = this.state;
+    onHandleClick = () => {
+        const { prodId, name, addToCart, cart, removeFromCart } = this.props;
+        const { selectedAttributes, amount } = this.state;
         const inCart = this.props.cart.items;
         const idx = testIfInCart(name, selectedAttributes, inCart)
 
         if (idx !== 0 && !idx) {
-            addToCart({ id: id, name: name, items: selectedAttributes, qty: 1 })
+            addToCart({ id: nanoid(), prodId: prodId, name: name, items: selectedAttributes, qty: 1, activePrice: amount })
         } else {
             let newQty = cart.items[idx].qty + 1;
+            const item = cart.items[idx]
             removeFromCart(idx);
-            addToCart({ id: id, name: name, items: selectedAttributes, qty: newQty })
+            addToCart({ ...item, qty: newQty })
         }
-        addCartToLS();
     }
 
     render() {
-        const { brand, name, attr, descr, activeCurrency } = this.props;
+        const { brand, name, attr, descr, activeCurrency: { symbol } } = this.props;
         const { amount, activeBtn } = this.state;
-        const notFound = !(amount || activeCurrency.symbol) ? <div>Not found</div> : null;
-        const price = !notFound ? <div className='Pdp__amount'>{activeCurrency.symbol}{amount}</div> : null;
+        const notFound = !(amount || symbol) ? <div>Not found</div> : null;
+        const price = !notFound ? <div className='Pdp__amount'>{symbol}{amount}</div> : null;
 
         return (
             <div className='Pdp__details'>
                 <h3 className='Pdp__brand'>{brand}</h3>
                 <div className='Pdp__name'>{name}</div>
                 {attr && <ul className='Pdp__attributes'>
-                    {attr.map((prop) => {
-                        return <Attributes key={prop.id} name={prop.name}
-                            items={prop.items} id={prop.id}
+                    {attr.map((prop, idx) => {
+                        return <Attributes key={idx} name={prop.name}
+                            items={prop.items} blockName='Pdp'
                             addToSelected={this.addToSelectedAttributes} />
                     })}
                 </ul>}
-                <div className="Pdp__attrTitle">Price:</div>
+                <div className="Pdp__attrName">Price:</div>
                 {notFound}
                 {price}
-                <button type='button' disabled={!activeBtn} onClick={this.handleClick}
+                <button type='button' disabled={!activeBtn} onClick={this.onHandleClick}
                     className={`Pdp__button ${activeBtn && 'activeBtn'}`}>add to card</button>
                 <div className='Pdp__descr'>{parse(`${descr}`)}</div>
             </div>
