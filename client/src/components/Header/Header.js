@@ -2,7 +2,7 @@ import { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { changeCurrency } from '../../redux/actions';
 import getNavigation from '../../graphql/queries/getNav';
-import getCurrencies from '../../graphql/queries/getCurrency';
+// import getCurrencies from '../../graphql/queries/getCurrency';
 
 import Nav from './Nav';
 import Container from '../Container';
@@ -20,6 +20,7 @@ class Header extends PureComponent {
         categories: [],
         loading: true,
         error: false,
+        // showBackDrop: false
     };
 
     componentDidMount() {
@@ -43,21 +44,24 @@ class Header extends PureComponent {
             }).catch(() => this.setState({ error: true }))
     }
 
-    handleGetCurrencies = () => {
-        getCurrencies
-            .then(response => {
-                this.setState({
-                    currencies: response.data.currencies,
-                    currentCurrency: response.data.currencies[0].symbol,
-                    loading: response.loading
-                })
-            }).catch(() => this.setState({ error: true }))
-    }
+    // handleGetCurrencies = () => {
+    //     getCurrencies
+    //         .then(response => {
+    //             this.setState({
+    //                 currencies: response.data.currencies,
+    //                 currentCurrency: response.data.currencies[0].symbol,
+    //                 loading: response.loading
+    //             })
+    //         }).catch(() => this.setState({ error: true }))
+    // }
 
     // changeCurrentCurrency = () => {
     //     this.setState({
     //         currentCurrency: this.props.activeCurrency.symbol
     //     })
+    // }
+    // handleBackDropShow = (value) => {
+    //     this.setState({ showBackDrop: value })
     // }
 
     render() {
@@ -75,8 +79,9 @@ class Header extends PureComponent {
                     {notAvailable}
                     {viewNav}
                     {viewNav && logotype}
-                    {viewNav && <Actions />}
+                    {viewNav && <Actions handleBackDropShow={this.handleBackDropShow} />}
                 </Container>
+                {/* {showBackDrop && <div onClick={this.showBagPreview} className='backDropBag'></div>} */}
             </header>
         )
     }

@@ -1,6 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-
-// import { rootreducer } from './rootreducer';
 import { categoryReducer } from './categoryReducer';
 import { currencyReducer } from './currencyReducer';
 import { prodReducer } from './prodReducer';
@@ -13,7 +11,6 @@ export const store = configureStore({
         activeProd: prodReducer,
         cart: cartReducer,
     },
-    // middleware: getDefaultMiddleware => getDefaultMiddleware(),
     devTools: process.env.NODE_ENV !== 'production'
 });
 

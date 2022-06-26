@@ -4,7 +4,8 @@ import {
     REPLACE_ITEM_PRICE,
     CHANGE_STATUS,
     INCR_QTY_OF_CART_ITEM,
-    DECR_QTY_OF_CART_ITEM
+    DECR_QTY_OF_CART_ITEM,
+    CHANGE_ATTRIBUTE,
 } from "./types";
 // import { createReducer } from "@reduxjs/toolkit";
 // import { replaceAllCartItems, removeFromCart, addToCart, replaceItem } from './actions'
@@ -52,7 +53,7 @@ export const cartReducer = (state = initialState, { type, payload }) => {
         case REMOVE_FROM_CART:
             return {
                 ...state,
-                items: [...state.items.filter((item, idx) => idx !== payload)]
+                items: [...state.items.filter(item => item.id !== payload)]
             }
         case REPLACE_ITEM_PRICE:
             return {
@@ -83,7 +84,16 @@ export const cartReducer = (state = initialState, { type, payload }) => {
                 items: state.items.map(item => {
                     return item.id !== payload
                         ? item
-                        : { ...item, qty: item.qty - 1 }
+                        : { ...item, qty: item.qty >= 1 ? item.qty - 1 : item.qty }
+                })
+            }
+        case CHANGE_ATTRIBUTE:
+            return {
+                ...state,
+                items: state.items.map(item => {
+                    return item.id !== payload.id
+                        ? item
+                        : { ...item, items: { ...item.items, [payload.name]: payload.value } }
                 })
             }
         default:

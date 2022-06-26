@@ -1,19 +1,16 @@
 import { PureComponent } from 'react';
 // import { PropTypes } from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-// import { replaceItem } from '../../../redux/actions';
-import { fetchPrices } from '../../../redux/actions';
-// import * as actions from '../../../redux/actions';
-// import { getCurrencyByID } from '../../../graphql/queries/pricesById';
 
-import BagItem from './BagItem';
+import BagItem from '../../BagItem';
 import Currencies from './Currencies';
+import ErrorIndicator from '../../ErrorIndicator';
+import Spinner from '../../Spinner'
 
 import './Actions.scss';
 import arrow from './Icons/arrow.svg';
 import cartImg from './Icons/Empty Cart.svg';
-import ErrorIndicator from '../../ErrorIndicator';
-import Spinner from '../../Spinner'
 
 class Actions extends PureComponent {
 
@@ -31,8 +28,8 @@ class Actions extends PureComponent {
         this.getTotalCount();
     }
 
-    componentDidUpdate(prevProps) {
-        const { cart, activeCurrency, activeCategory, fetchPrices } = this.props;
+    componentDidUpdate(prevProps, prevState) {
+        const { cart, activeCategory } = this.props;
         if (prevProps.cart !== cart) {
             this.getCountItemsInCart();
             this.getTotalCount();
@@ -40,8 +37,13 @@ class Actions extends PureComponent {
         if (prevProps.activeCategory !== activeCategory && this.state.openBagPreview) {
             this.setState({ openBagPreview: false })
         }
-        if (prevProps.activeCurrency !== activeCurrency) {
-            // fetchPrices(activeCurrency)
+        if (prevState.openBagPreview !== this.state.openBagPreview) {
+            // handleBackDropShow(this.state.openBagPreview);
+            if (this.state.openBagPreview) {
+                document.body.style.overflow = 'hidden'
+            } else {
+                document.body.style.overflow = 'unset'
+            }
         }
     }
 
@@ -98,7 +100,7 @@ class Actions extends PureComponent {
                 {!(pricesLoading || pricesLoadError) &&
                     <div onClick={this.showBagPreview} className='Actions__cart'>
                         <img className='Actions__image' src={cartImg} alt="cart" />
-                        {count && <span className='Actions__qty'>{count}</span>}
+                        {count > 0 && <span className='Actions__qty'>{count}</span>}
                     </div>
                 }
 
@@ -114,7 +116,7 @@ class Actions extends PureComponent {
                         </div>
                         <ul className='bagPreview__list'>
                             {cart.map(item => {
-                                return <BagItem key={item.id} product={item} />
+                                return <BagItem key={item.id} product={item} mainClass='BagItemBanner' />
                             })}
                         </ul>
                         <div className="bagPreview__totalPrice">
@@ -122,8 +124,17 @@ class Actions extends PureComponent {
                             <span className='bagPreview__totalPrice-amount'>{activeCurrency}{totalCount.toFixed(2)}</span>
                         </div>
                         <div className="bagPreview__buttons">
-                            <button className='bagPreview__button bagPreview__button-white' type='button'>view bag</button>
-                            <button className='bagPreview__button bagPreview__button-green' type='button'>check out</button>
+                            <Link onClick={this.showBagPreview} to={'/cart'}
+                                className='bagPreview__button bagPreview__button-white'
+                                type='button'>
+                                view bag
+                            </Link>
+                            <button
+                                className='bagPreview__button bagPreview__button-green'
+                                type='button'
+                                onClick={() => alert('this must be "Check out"')}>
+                                check out
+                            </button>
                         </div>
                     </div>}
             </div>
@@ -142,7 +153,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchPrices: (symbol) => dispatch(fetchPrices(symbol))
+        // fetchPrices: (symbol) => dispatch(fetchPrices(symbol))
     }
 }
 

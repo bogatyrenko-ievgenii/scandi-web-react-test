@@ -79,14 +79,14 @@ class ProdDetails extends PureComponent {
         const { prodId, name, addToCart, cart, removeFromCart } = this.props;
         const { selectedAttributes, amount } = this.state;
         const inCart = this.props.cart.items;
-        const idx = testIfInCart(name, selectedAttributes, inCart)
+        const id = testIfInCart(name, selectedAttributes, inCart)
 
-        if (idx !== 0 && !idx) {
+        if (!id) {
             addToCart({ id: nanoid(), prodId: prodId, name: name, items: selectedAttributes, qty: 1, activePrice: amount })
         } else {
-            let newQty = cart.items[idx].qty + 1;
-            const item = cart.items[idx]
-            removeFromCart(idx);
+            const item = cart.items.find(item => item.id === id);
+            let newQty = item.qty + 1;
+            removeFromCart(id);
             addToCart({ ...item, qty: newQty })
         }
     }

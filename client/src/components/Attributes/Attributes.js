@@ -1,6 +1,7 @@
 import { PureComponent } from 'react';
 import Attribute from './Attribute/Attribute';
 import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 
 
 
@@ -15,14 +16,20 @@ class Attributes extends PureComponent {
     }
 
     onSelect = (value) => {
-        const { name, addToSelected } = this.props
+        const { name, id, addToSelected } = this.props;
+
         if (this.state.selected === value) {
             return
         } else {
             this.setState({
                 selected: value
             })
-            addToSelected(name, value)
+            if (id) {
+                this.props.changeAttribute({ id, name, value })
+            }
+            if (addToSelected) {
+                addToSelected(name, value)
+            }
         }
     }
 
@@ -38,7 +45,7 @@ class Attributes extends PureComponent {
     render() {
 
         const { name, items, blockName } = this.props;
-
+        // console.log(this.props);
         return (
             <li className={`${blockName}__attribute`}>
                 <div className={`${blockName}__attrName`}>{name}:</div>
@@ -60,4 +67,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(Attributes);
+export default connect(mapStateToProps, actions)(Attributes);

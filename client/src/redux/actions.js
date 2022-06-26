@@ -7,12 +7,11 @@ import {
     REPLACE_ITEM_PRICE,
     CHANGE_STATUS,
     INCR_QTY_OF_CART_ITEM,
-    DECR_QTY_OF_CART_ITEM
+    DECR_QTY_OF_CART_ITEM,
+    CHANGE_ATTRIBUTE,
 } from "./types";
 import { getCurrencyByID } from "../graphql/queries/pricesById";
 import { store } from "./store";
-
-const cart = store.getState().cart.items;
 
 export function changeCategory(name) {
     return {
@@ -20,15 +19,6 @@ export function changeCategory(name) {
         payload: name
     }
 }
-
-// export const changeCategory = createAction('CHANGE_CATEGORY');
-// export const changeCurrency = createAction('CHANGE_CURRENCY');
-// export const changeProdId = createAction('CHANGE_PROD_ID');
-// export const addToCart = createAction('ADD_TO_CART');
-// export const removeFromCart = createAction('REMOVE_FROM_CART');
-// export const replaceAllCartItems = createAction(REPLACE_ALL_CART_ITEMS);
-// export const replaceItem = createAction('REPLACE_ITEM')
-
 
 export function changeCurrency(symbol) {
     return {
@@ -51,19 +41,12 @@ export function addToCart(item) {
     }
 }
 
-export function removeFromCart(item) {
+export function removeFromCart(id) {
     return {
         type: REMOVE_FROM_CART,
-        payload: item
+        payload: id
     }
 }
-
-// export function replaceAllCartItems(items) {
-//     return {
-//         type: REPLACE_ALL_CART_ITEMS,
-//         payload: items
-//     }
-// }
 
 export function replaceItemPrice(payload) {
     return {
@@ -93,18 +76,12 @@ export function decrQtyCartItem(id) {
     }
 }
 
-// export const changeQtyCartItem = (id, type) => (dispatch) => {
-
-//     if (cart.length) {
-//         cart.forEach(item => {
-//             if (item.id === id) {
-//                 if (type === 'incr') {
-//                     dispatch(incrQtyCartItem())
-//                 }
-//             }
-//         })
-//     }
-// }
+export function changeAttribute(payload) {
+    return {
+        type: CHANGE_ATTRIBUTE,
+        payload
+    }
+}
 
 export const fetchPrices = (currency) => async (dispatch) => {
     const cart = store.getState().cart.items;
@@ -115,8 +92,8 @@ export const fetchPrices = (currency) => async (dispatch) => {
             getCurrencyByID(item.prodId)
                 .then(response => {
                     response.data.product.prices.forEach(price => {
-                        dispatch(fetchingPriceStatus('idle'));
                         if (price.currency.symbol === currency) {
+                            dispatch(fetchingPriceStatus('idle'));
                             const item = cart[idx];
                             dispatch(replaceItemPrice({ id: item.id, newPrice: price.amount }))
                         }
@@ -127,5 +104,4 @@ export const fetchPrices = (currency) => async (dispatch) => {
                 })
         })
     }
-
 }

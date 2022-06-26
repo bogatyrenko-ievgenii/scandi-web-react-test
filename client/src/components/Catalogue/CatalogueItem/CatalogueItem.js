@@ -61,9 +61,9 @@ class CatalogueItem extends PureComponent {
     onHandleClick = () => {
         const { product, cart, addToCart, removeFromCart } = this.props;
         const defaultAttrs = this.createDefaultAttrs();
-        const idx = testIfInCart(product.name, defaultAttrs, cart.items)
+        const id = testIfInCart(product.name, defaultAttrs, cart.items)
 
-        if (idx !== 0 && !idx) {
+        if (!id) {
             addToCart({
                 id: nanoid(),
                 prodId: product.id,
@@ -73,9 +73,9 @@ class CatalogueItem extends PureComponent {
                     this.state.amount
             })
         } else {
-            let newQty = cart.items[idx].qty + 1;
-            const item = cart.items[idx];
-            removeFromCart(idx);
+            const item = cart.items.find(item => item.id === id);
+            let newQty = item.qty + 1;
+            removeFromCart(id);
             addToCart({
                 ...item, qty: newQty
             })
