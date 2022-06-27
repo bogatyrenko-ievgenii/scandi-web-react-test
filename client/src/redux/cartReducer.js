@@ -6,6 +6,7 @@ import {
     INCR_QTY_OF_CART_ITEM,
     DECR_QTY_OF_CART_ITEM,
     CHANGE_ATTRIBUTE,
+    GET_TOTAL_COUNT,
 } from "./types";
 // import { createReducer } from "@reduxjs/toolkit";
 // import { replaceAllCartItems, removeFromCart, addToCart, replaceItem } from './actions'
@@ -17,6 +18,7 @@ const getCartItemsFromLS = () => {
 
 const initialState = {
     items: getCartItemsFromLS(),
+    totalCount: 0,
     loadingStatus: 'idle'
 }
 
@@ -95,6 +97,13 @@ export const cartReducer = (state = initialState, { type, payload }) => {
                         ? item
                         : { ...item, items: { ...item.items, [payload.name]: payload.value } }
                 })
+            }
+        case GET_TOTAL_COUNT:
+            return {
+                ...state,
+                totalCount: state.items.reduce((prev, current) => {
+                    return prev + current.qty * current.activePrice
+                }, 0)
             }
         default:
             return state

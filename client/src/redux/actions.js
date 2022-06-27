@@ -9,6 +9,7 @@ import {
     INCR_QTY_OF_CART_ITEM,
     DECR_QTY_OF_CART_ITEM,
     CHANGE_ATTRIBUTE,
+    GET_TOTAL_COUNT
 } from "./types";
 import { getCurrencyByID } from "../graphql/queries/pricesById";
 import { store } from "./store";
@@ -81,6 +82,10 @@ export function changeAttribute(payload) {
         type: CHANGE_ATTRIBUTE,
         payload
     }
+}
+
+export function getTotalCount() {
+    return { type: GET_TOTAL_COUNT }
 }
 
 export const fetchPrices = (currency) => async (dispatch) => {

@@ -3,7 +3,7 @@ import Attribute from './Attribute/Attribute';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 
-
+// import './BagItemBanner.scss'
 
 class Attributes extends PureComponent {
 

@@ -6,7 +6,7 @@ import getNavigation from '../../graphql/queries/getNav';
 
 import Nav from './Nav';
 import Container from '../Container';
-import Actions from './Actions';
+import Actions from './HeaderActions';
 import Spinner from '../Spinner';
 
 

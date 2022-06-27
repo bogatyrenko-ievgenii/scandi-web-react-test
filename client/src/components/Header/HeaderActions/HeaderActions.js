@@ -6,9 +6,11 @@ import { connect } from 'react-redux';
 import BagItem from '../../BagItem';
 import Currencies from './Currencies';
 import ErrorIndicator from '../../ErrorIndicator';
-import Spinner from '../../Spinner'
+import Spinner from '../../Spinner';
+import * as actions from '../../../redux/actions';
 
-import './Actions.scss';
+import './HeaderActions.scss';
+import './BagItemBanner.scss';
 import arrow from './Icons/arrow.svg';
 import cartImg from './Icons/Empty Cart.svg';
 
@@ -19,26 +21,24 @@ class Actions extends PureComponent {
         openSelect: false,
         openBagPreview: false,
         count: null,
-        totalCount: 0,
         cartPrices: []
     }
 
     componentDidMount() {
         this.getCountItemsInCart();
-        this.getTotalCount();
+        this.props.getTotalCount();
     }
 
     componentDidUpdate(prevProps, prevState) {
         const { cart, activeCategory } = this.props;
         if (prevProps.cart !== cart) {
             this.getCountItemsInCart();
-            this.getTotalCount();
+            this.props.getTotalCount();
         }
         if (prevProps.activeCategory !== activeCategory && this.state.openBagPreview) {
             this.setState({ openBagPreview: false })
         }
         if (prevState.openBagPreview !== this.state.openBagPreview) {
-            // handleBackDropShow(this.state.openBagPreview);
             if (this.state.openBagPreview) {
                 document.body.style.overflow = 'hidden'
             } else {
@@ -72,22 +72,16 @@ class Actions extends PureComponent {
             }, 0)
             this.setState({ count })
         }
-
-    }
-
-    getTotalCount = () => {
-        let count = this.props.cart.reduce((prev, current) => {
-            return prev + current.qty * current.activePrice
-        }, 0)
-        this.setState({ totalCount: count })
     }
 
     render() {
-        const { cart, activeCurrency, priceLoadingStatus } = this.props;
-        const { openSelect, openBagPreview, count, totalCount } = this.state;
+        const { cart, activeCurrency, priceLoadingStatus, totalCount } = this.props;
+        const { openSelect, openBagPreview, count } = this.state;
 
         const pricesLoading = priceLoadingStatus === 'loading' ? <Spinner size={20} /> : null;
         const pricesLoadError = priceLoadingStatus === 'error' ? <ErrorIndicator /> : null;
+
+        let mainClass = 'BagItemBanner'
 
         return (
             <div className='Actions' >
@@ -116,7 +110,9 @@ class Actions extends PureComponent {
                         </div>
                         <ul className='bagPreview__list'>
                             {cart.map(item => {
-                                return <BagItem key={item.id} product={item} mainClass='BagItemBanner' />
+                                return <li key={item.id} className={mainClass}>
+                                    <BagItem product={item} mainClass={mainClass} />
+                                </li>
                             })}
                         </ul>
                         <div className="bagPreview__totalPrice">
@@ -145,15 +141,10 @@ class Actions extends PureComponent {
 function mapStateToProps(state) {
     return {
         cart: state.cart.items,
+        totalCount: state.cart.totalCount,
         priceLoadingStatus: state.cart.loadingStatus,
         activeCategory: state.activeCategory.name,
-        activeCurrency: state.activeCurrency.symbol
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        // fetchPrices: (symbol) => dispatch(fetchPrices(symbol))
+        activeCurrency: state.activeCurrency.symbol,
     }
 }
 
@@ -163,4 +154,4 @@ Actions.propTypes = {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Actions);
+export default connect(mapStateToProps, actions)(Actions);

@@ -8,13 +8,55 @@ import BagItem from '../BagItem';
 import './Cart.scss';
 
 class Cart extends PureComponent {
-    render() {
-        return (
-            <section className='Cart'>
-                <Container>
-                    <h2 className='Cart__title'>Cart</h2>
-                    <div className='Cart__decorLine'></div>
 
+    state = {
+        tax: 0
+    }
+
+    componentDidMount() {
+        this.props.changeCategory('');
+        this.setTax();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.totalCount !== this.props.totalCount) {
+            this.setTax();
+        }
+    }
+
+    setTax = () => {
+        let count = this.props.totalCount
+        this.setState({ tax: count / 100 * 21 })
+    }
+
+    render() {
+        const { cart, activeCurrency, totalCount } = this.props;
+
+        let mainClass = 'Cart';
+
+        return (
+            <section className={mainClass}>
+                <Container>
+                    <h1 className={`${mainClass}__title`}>Cart</h1>
+                    <div className={`${mainClass}__decorLine`}></div>
+                    <ul className={`${mainClass}__list`}>
+                        {cart.map(item => {
+                            return <li key={item.id} className={`${mainClass}__item`}>
+                                <BagItem product={item} mainClass={mainClass} />
+                                <div className={`${mainClass}__decorLine`}></div>
+                            </li>
+                        })}
+                    </ul>
+                    <div className={`${mainClass}__tax`}>
+                        Tax 21%: <span className={`${mainClass}__digits`}>{activeCurrency}{this.state.tax.toFixed(2)}</span>
+                    </div>
+                    <div className={`${mainClass}__qty`}>
+                        Quantity: <span className={`${mainClass}__digits`}>5</span>
+                    </div>
+                    <div className={`${mainClass}__total`}>
+                        Total: <span className={`${mainClass}__digits`}>{activeCurrency}{totalCount.toFixed(2)}</span>
+                    </div>
+                    <button className={`${mainClass}__button`} onClick={() => alert('this must be "Order"...')}>order</button>
                 </Container>
             </section>
         );
@@ -23,7 +65,9 @@ class Cart extends PureComponent {
 
 function mapStateToProps(state) {
     return {
-        cart: state.cart.items
+        cart: state.cart.items,
+        totalCount: state.cart.totalCount,
+        activeCurrency: state.activeCurrency.symbol,
     }
 }
 
