@@ -7,9 +7,8 @@ import {
     DECR_QTY_OF_CART_ITEM,
     CHANGE_ATTRIBUTE,
     GET_TOTAL_COUNT,
+    GET_QTY_ITEMS_IN_CART
 } from "./types";
-// import { createReducer } from "@reduxjs/toolkit";
-// import { replaceAllCartItems, removeFromCart, addToCart, replaceItem } from './actions'
 
 const getCartItemsFromLS = () => {
     const cart = localStorage.getItem('cart');
@@ -18,32 +17,11 @@ const getCartItemsFromLS = () => {
 
 const initialState = {
     items: getCartItemsFromLS(),
+    itemsQty: 0,
     totalCount: 0,
     loadingStatus: 'idle'
 }
 
-// Reducer was created without using Immer.
-
-// export const cartReducer = createReducer(initialState, builder => {
-//     builder
-//         .addCase(addToCart, (state, action) => ({
-//             ...state,
-//             items: [...state.items, action.payload]
-//         }))
-//         .addCase(removeFromCart, (state, action) => ({
-//             ...state,
-//             items: state.items.filter((item, idx) => idx !== action.payload)
-//         }))
-//         .addCase(replaceItem, (state, action) => ({
-//             ...state,
-//             items: state.items.map(item => {
-//                 return item.id !== action.payload.id
-//                     ? item
-//                     : { ...item, activePrice: action.payload.newPrice }
-//             })
-//         }))
-//         .addDefaultCase(() => { });
-// })
 
 export const cartReducer = (state = initialState, { type, payload }) => {
     switch (type) {
@@ -103,6 +81,13 @@ export const cartReducer = (state = initialState, { type, payload }) => {
                 ...state,
                 totalCount: state.items.reduce((prev, current) => {
                     return prev + current.qty * current.activePrice
+                }, 0)
+            }
+        case GET_QTY_ITEMS_IN_CART:
+            return {
+                ...state,
+                itemsQty: state.items.reduce((prev, current) => {
+                    return prev + current.qty
                 }, 0)
             }
         default:

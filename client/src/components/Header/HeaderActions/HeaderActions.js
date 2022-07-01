@@ -11,72 +11,79 @@ import * as actions from '../../../redux/actions';
 
 import './HeaderActions.scss';
 import './BagItemBanner.scss';
+import './Currencies.scss';
+import './bagPreview.scss';
 import arrow from './Icons/arrow.svg';
 import cartImg from './Icons/Empty Cart.svg';
 
 class Actions extends PureComponent {
 
-    state = {
-        currency: null,
-        openSelect: false,
-        openBagPreview: false,
-        count: null,
-        cartPrices: []
-    }
+    // state = {
+    //     // currency: null,
+    //     // openSelect: false,
+    //     // openBagPreview: false,
+    //     // count: null,
+    //     // cartPrices: []
+    // }
 
     componentDidMount() {
-        this.getCountItemsInCart();
+        this.props.getCountItemsInCart();
         this.props.getTotalCount();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        const { cart, activeCategory } = this.props;
+    componentDidUpdate(prevProps) {
+        const { cart, getTotalCount, getCountItemsInCart } = this.props;
         if (prevProps.cart !== cart) {
-            this.getCountItemsInCart();
-            this.props.getTotalCount();
+            getCountItemsInCart();
+            getTotalCount();
         }
-        if (prevProps.activeCategory !== activeCategory && this.state.openBagPreview) {
-            this.setState({ openBagPreview: false })
-        }
-        if (prevState.openBagPreview !== this.state.openBagPreview) {
-            if (this.state.openBagPreview) {
-                document.body.style.overflow = 'hidden'
-            } else {
-                document.body.style.overflow = 'unset'
-            }
-        }
+        // if (prevProps.activeCategory !== activeCategory && this.state.openBagPreview) {
+        //     this.setState({ openBagPreview: false })
+        // }
+        // if (prevState.openBagPreview !== this.state.openBagPreview) {
+
+        //     if (this.state.openBagPreview) {
+        //         // document.body.style.overflow = 'hidden'
+        //         // document.querySelector('.Layout').children[1].
+        //         // document.querySelector('.Layout').children[1].scrollHeight = '100vh'
+
+        //     } else {
+        //         document.body.style.overflow = 'unset'
+        //     }
+        // }
     }
 
-    showSelect = () => {
-        this.setState(({ openSelect }) => ({
-            openSelect: !openSelect
-        }))
-        if (this.state.openBagPreview) {
-            this.setState({
-                openBagPreview: false
-            })
-        }
-    }
+    // 2 ф-ции перенос в header
 
-    showBagPreview = () => {
-        this.setState(({ openBagPreview }) => ({
-            openBagPreview: !openBagPreview
-        }))
-    }
+    // showSelect = () => {
+    //     this.setState(({ openSelect }) => ({
+    //         openSelect: !openSelect
+    //     }))
+    //     if (this.state.openBagPreview) {
+    //         this.setState({
+    //             openBagPreview: false
+    //         })
+    //     }
+    // }
 
-    getCountItemsInCart = () => {
-        const cart = this.props.cart
-        if (cart.length !== 0) {
-            let count = cart.reduce((prev, current) => {
-                return prev + current.qty
-            }, 0)
-            this.setState({ count })
-        }
-    }
+    // showBagPreview = () => {
+    //     this.setState(({ openBagPreview }) => ({
+    //         openBagPreview: !openBagPreview
+    //     }))
+    // }
+
+    // getCountItemsInCart = () => {
+    //     const cart = this.props.cart
+    //     if (cart.length !== 0) {
+    //         let count = cart.reduce((prev, current) => {
+    //             return prev + current.qty
+    //         }, 0)
+    //         this.setState({ count })
+    //     }
+    // }
 
     render() {
-        const { cart, activeCurrency, priceLoadingStatus, totalCount } = this.props;
-        const { openSelect, openBagPreview, count } = this.state;
+        const { cart, activeCurrency, priceLoadingStatus, totalCount, onShowBagSelect, onShowCurrencySelect, bagSelect, currencySelect, cartItemsQty } = this.props;
 
         const pricesLoading = priceLoadingStatus === 'loading' ? <Spinner size={20} /> : null;
         const pricesLoadError = priceLoadingStatus === 'error' ? <ErrorIndicator /> : null;
@@ -85,28 +92,26 @@ class Actions extends PureComponent {
 
         return (
             <div className='Actions' >
-                <div onClick={this.showSelect} className="Actions__currencies">
+                <div onClick={onShowCurrencySelect} className="Actions__currencies">
                     {activeCurrency} <img className='Actions__arrow' src={arrow} alt="v" />
                 </div>
 
                 {pricesLoading}
                 {pricesLoadError}
                 {!(pricesLoading || pricesLoadError) &&
-                    <div onClick={this.showBagPreview} className='Actions__cart'>
+                    <div onClick={onShowBagSelect} className='Actions__cart'>
                         <img className='Actions__image' src={cartImg} alt="cart" />
-                        {count > 0 && <span className='Actions__qty'>{count}</span>}
+                        {cartItemsQty > 0 && <span className='Actions__qty'>{cartItemsQty}</span>}
                     </div>
                 }
 
-                {openSelect && <div onClick={this.showSelect} className="backDropCurrency"></div>}
-                {openSelect && <Currencies showSelect={this.showSelect} />}
+                {currencySelect && <Currencies showSelect={onShowCurrencySelect} />}
 
-                {openBagPreview && <div onClick={this.showBagPreview} className='backDropBag'></div>}
-                {openBagPreview &&
+                {bagSelect &&
                     <div className="bagPreview">
                         <div className="bagPreview__title">
                             <span className='bagPreview__title-bold'>My Bag, </span>
-                            <span className='bagPreview__title-medium'>{count} items</span>
+                            <span className='bagPreview__title-medium'>{cartItemsQty} items</span>
                         </div>
                         <ul className='bagPreview__list'>
                             {cart.map(item => {
@@ -120,7 +125,7 @@ class Actions extends PureComponent {
                             <span className='bagPreview__totalPrice-amount'>{activeCurrency}{totalCount.toFixed(2)}</span>
                         </div>
                         <div className="bagPreview__buttons">
-                            <Link onClick={this.showBagPreview} to={'/cart'}
+                            <Link onClick={onShowBagSelect} to={'/cart'}
                                 className='bagPreview__button bagPreview__button-white'
                                 type='button'>
                                 view bag
@@ -142,9 +147,12 @@ function mapStateToProps(state) {
     return {
         cart: state.cart.items,
         totalCount: state.cart.totalCount,
+        cartItemsQty: state.cart.itemsQty,
         priceLoadingStatus: state.cart.loadingStatus,
         activeCategory: state.activeCategory.name,
         activeCurrency: state.activeCurrency.symbol,
+        bagSelect: state.customSelects.bagSelect,
+        currencySelect: state.customSelects.currencySelect
     }
 }
 

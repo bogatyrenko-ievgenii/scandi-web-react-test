@@ -6,6 +6,8 @@ import { getProductByID } from '../../graphql/queries/getProductByID';
 
 import Container from '../Container';
 import ProdDetails from './ProdDetails'
+import BackDrops from '../BackDrops';
+import Modal from '../Modal';
 
 import './ProductDescrPage.scss';
 
@@ -24,6 +26,7 @@ class ProductDescrPage extends PureComponent {
         attributes: [],
         prices: [],
         inStock: null,
+        showModal: false
     }
 
     componentDidMount() {
@@ -56,15 +59,19 @@ class ProductDescrPage extends PureComponent {
         this.setState({ activeImage: idx })
     }
 
+    onShowModal = () => {
+        this.setState({ showModal: !this.state.showModal })
+    }
+
     render() {
-        const { error, loading, name, brand, description, prodId, gallery, activeImage, attributes, prices, inStock } = this.state;
+        const { error, loading, name, brand, description, prodId, gallery, activeImage, attributes, prices, inStock, showModal } = this.state;
 
         const processing = loading ? 'Loading' : null;
         const notAvailable = error ? 'Error' : null;
         const showProduct = !(loading || error) ? true : null;
 
         return (
-            <section className="Pdp">
+            <main className="Pdp">
                 <Container>
                     {processing}
                     {notAvailable}
@@ -80,11 +87,20 @@ class ProductDescrPage extends PureComponent {
                             <img className='Pdp__img' src={gallery[activeImage]} alt={name} />
                         </div>
                         <ProdDetails prodId={prodId} brand={brand} name={name}
-                            attr={attributes} descr={description} prices={prices} inStock={inStock} />
+                            attr={attributes} descr={description} prices={prices} inStock={inStock} showModal={this.onShowModal} />
                     </div>
                     }
                 </Container>
-            </section>
+                <BackDrops />
+                {!inStock && showModal &&
+                    <Modal showModalStatus={showModal} closeModal={this.onShowModal}>
+                        <article className='Modal__textWrap'>
+                            <div>This product isn't in Stock.</div>
+                            <div>Investigatively, it couldn't be added to cart.</div>
+                            <div>Try to look for something else...</div>
+                        </article>
+                    </Modal>}
+            </main>
 
         );
     }
@@ -94,6 +110,7 @@ function mapStateToProps(state) {
     return {
         activeCurrency: state.activeCurrency,
         activeProd: state.activeProd,
+        // bagSelect: state.customSelects.bagSelect
     }
 }
 

@@ -1,12 +1,15 @@
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { createBrowserHistory } from 'history';
 
 import Container from '../Container';
 import Spinner from '../Spinner';
 import ErrorIndicator from '../ErrorIndicator';
 import CatalogueItem from './CatalogueItem';
+import BackDrops from '../BackDrops';
 import { getProductsByCategory } from '../../graphql/queries/getProductsByCategory';
+import * as actions from '../../redux/actions';
 
 import './Catalogue.scss';
 
@@ -23,14 +26,14 @@ class Catalogue extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.activeCategory.name !== this.props.activeCategory.name) {
+        if (prevProps.activeCategory !== this.props.activeCategory) {
             this.getData();
         }
     }
 
-    getData = () => {
+    getData = async () => {
         this.setState({ loading: true })
-        return getProductsByCategory(this.props.activeCategory.name)
+        return await getProductsByCategory(this.props.activeCategory)
             .then(response => {
                 this.setState({
                     products: response.data.category.products,
@@ -46,12 +49,13 @@ class Catalogue extends PureComponent {
     }
 
     render() {
+        console.log(createBrowserHistory());
         const { activeCategory } = this.props;
         const { error, loading, products } = this.state
         const notAvailable = error ? <ErrorIndicator /> : null;
         const processing = loading ? <Spinner size={100} /> : null;
-        const title = !(loading || error || !activeCategory.name)
-            ? <h1 className='Catalogue__title'>{this.makeCapitalLetter(activeCategory.name)}</h1>
+        const title = !(loading || error || !activeCategory)
+            ? <h1 className='Catalogue__title'>{this.makeCapitalLetter(activeCategory)}</h1>
             : null;
 
         return (
@@ -66,19 +70,20 @@ class Catalogue extends PureComponent {
                         })}
                     </ul>}
                 </Container>
+                <BackDrops />
             </main>
         );
     }
 }
 
 Catalogue.propTypes = {
-    activeCategory: PropTypes.object.isRequired,
+    activeCategory: PropTypes.string.isRequired,
 }
 
 function mapStateToProps(state) {
     return {
-        activeCategory: state.activeCategory,
+        activeCategory: state.activeCategory.name,
     };
 }
 
-export default connect(mapStateToProps)(Catalogue);
+export default connect(mapStateToProps, actions)(Catalogue);

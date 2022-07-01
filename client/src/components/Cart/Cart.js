@@ -4,6 +4,7 @@ import * as actions from '../../redux/actions';
 
 import Container from '../Container';
 import BagItem from '../BagItem';
+import BackDrops from '../BackDrops';
 
 import './Cart.scss';
 
@@ -30,7 +31,7 @@ class Cart extends PureComponent {
     }
 
     render() {
-        const { cart, activeCurrency, totalCount } = this.props;
+        const { cart, activeCurrency, totalCount, cartItemsQty } = this.props;
 
         let mainClass = 'Cart';
 
@@ -51,13 +52,14 @@ class Cart extends PureComponent {
                         Tax 21%: <span className={`${mainClass}__digits`}>{activeCurrency}{this.state.tax.toFixed(2)}</span>
                     </div>
                     <div className={`${mainClass}__qty`}>
-                        Quantity: <span className={`${mainClass}__digits`}>5</span>
+                        Quantity: <span className={`${mainClass}__digits`}>{cartItemsQty}</span>
                     </div>
                     <div className={`${mainClass}__total`}>
                         Total: <span className={`${mainClass}__digits`}>{activeCurrency}{totalCount.toFixed(2)}</span>
                     </div>
                     <button className={`${mainClass}__button`} onClick={() => alert('this must be "Order"...')}>order</button>
                 </Container>
+                <BackDrops />
             </section>
         );
     }
@@ -67,6 +69,7 @@ function mapStateToProps(state) {
     return {
         cart: state.cart.items,
         totalCount: state.cart.totalCount,
+        cartItemsQty: state.cart.itemsQty,
         activeCurrency: state.activeCurrency.symbol,
     }
 }

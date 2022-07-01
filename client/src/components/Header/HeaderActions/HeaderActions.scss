@@ -39,111 +39,113 @@
     }
 }
 
-.Currencies {
-    padding: 10px 0;
-    list-style-type: none;
-    position: absolute;
-    top: 27px;
-    right: -28px;
-    font-weight: 500;
-    font-size: 18px;
-    color: rgba(29, 31, 34, 1);
-    box-shadow: 0px 4px 15.4px rgb(0, 0, 0, 0.08);
-    z-index: 3;
-    &__item {
-        padding-left: 20px;
-        height: 45px;
-        width: 114px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-    .active {
-        background-color: rgba(238, 238, 238, 1);
-    }
-}
+// .Currencies {
+//     padding: 10px 0;
+//     list-style-type: none;
+//     position: absolute;
+//     top: 27px;
+//     right: -28px;
+//     font-weight: 500;
+//     font-size: 18px;
+//     color: rgba(29, 31, 34, 1);
+//     box-shadow: 0px 4px 15.4px rgb(0, 0, 0, 0.08);
+//     z-index: 3;
+//     &__item {
+//         padding-left: 20px;
+//         height: 45px;
+//         width: 114px;
+//         display: flex;
+//         align-items: center;
+//         cursor: pointer;
+//     }
+//     .active {
+//         background-color: rgba(238, 238, 238, 1);
+//     }
+// }
 
-.backDropCurrency {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    z-index: 2;
-}
+// .backDropCurrency {
+//     position: fixed;
+//     width: 100vw;
+//     height: 100vh;
+//     top: 0;
+//     left: 0;
+//     z-index: 2;
+// }
 
-.backDropBag {
-    position: fixed;
-    top: 80px;
-    left: 0;
-    width: 100vw;
-    height: calc(100vh - 80px);
-    background-color: rgba(57, 55, 72, 0.22);
-    z-index: 2;
-}
+// .backDropBag {
+//     position: absolute;
+//     top: 80px;
+//     left: 0;
+//     bottom: 0;
+//     // width: 100vw;
+//     right: 0;
+//     // height: calc(100vh - 80px);
+//     background-color: rgba(57, 55, 72, 0.22);
+//     z-index: 2;
+// }
 
-.bagPreview {
-    width: 352px;
-    background-color: rgba(255, 255, 255, 1);
-    position: absolute;
-    top: 52px;
-    right: -52px;
-    z-index: 3;
-    padding: 32px 16px 32px 16px;
-    &__buttons {
-        display: flex;
-        justify-content: space-between;
-    }
-    &__button {
-        cursor: pointer;
-        text-transform: uppercase;
-        border: none;
-        width: 140px;
-        height: 43px;
-        font-weight: 600;
-        font-size: 14px;
-        text-align: center;
-        line-height: 3em;
-        &-white {
-            background-color: rgba(255, 255, 255, 1);
-            border: 1px solid rgba(29, 31, 34, 1);
-            color: rgba(29, 31, 34, 1);
-        }
-        &-green {
-            background-color: rgba(94, 206, 123, 1);
-            color: rgba(255, 255, 255, 1);
-        }
-    }
-    &__totalPrice {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 32px;
-        color: rgba(29, 31, 34, 1);
-        font-size: 16px;
-        &-title {
-            font-family: "Roboto", sans-serif;
-            font-weight: 500;
-        }
-        &-amount {
-            font-weight: 700;
-        }
-    }
-    &__title {
-        margin-bottom: 32px;
-        font-size: 16px;
-        color: rgba(29, 31, 34, 1);
-        &-bold {
-            font-weight: 700;
-        }
-        &-medium {
-            font-weight: 500;
-        }
-    }
-    &__list {
-        list-style-type: none;
-        width: 100%;
-    }
-}
+// .bagPreview {
+//     width: 352px;
+//     background-color: rgba(255, 255, 255, 1);
+//     position: absolute;
+//     top: 52px;
+//     right: -52px;
+//     z-index: 3;
+//     padding: 32px 16px 32px 16px;
+//     &__buttons {
+//         display: flex;
+//         justify-content: space-between;
+//     }
+//     &__button {
+//         cursor: pointer;
+//         text-transform: uppercase;
+//         border: none;
+//         width: 140px;
+//         height: 43px;
+//         font-weight: 600;
+//         font-size: 14px;
+//         text-align: center;
+//         line-height: 3em;
+//         &-white {
+//             background-color: rgba(255, 255, 255, 1);
+//             border: 1px solid rgba(29, 31, 34, 1);
+//             color: rgba(29, 31, 34, 1);
+//         }
+//         &-green {
+//             background-color: rgba(94, 206, 123, 1);
+//             color: rgba(255, 255, 255, 1);
+//         }
+//     }
+//     &__totalPrice {
+//         display: flex;
+//         justify-content: space-between;
+//         margin-bottom: 32px;
+//         color: rgba(29, 31, 34, 1);
+//         font-size: 16px;
+//         &-title {
+//             font-family: "Roboto", sans-serif;
+//             font-weight: 500;
+//         }
+//         &-amount {
+//             font-weight: 700;
+//         }
+//     }
+//     &__title {
+//         margin-bottom: 32px;
+//         font-size: 16px;
+//         color: rgba(29, 31, 34, 1);
+//         &-bold {
+//             font-weight: 700;
+//         }
+//         &-medium {
+//             font-weight: 500;
+//         }
+//     }
+//     &__list {
+//         list-style-type: none;
+//         width: 100%;
+//     }
+// }
 
 // .BagItemBanner {
 //     margin-bottom: 40px;

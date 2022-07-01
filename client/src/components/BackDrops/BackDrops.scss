@@ -1,0 +1,18 @@
+.backDropTransparent {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.backDropDark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(57, 55, 72, 0.22);
+    z-index: 2;
+}

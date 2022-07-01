@@ -1,0 +1,48 @@
+.Modal {
+    position: absolute;
+    padding: 15px;
+    width: 500px;
+    height: 200px;
+    background-color: #fff;
+    border-radius: 3px;
+    top: 3%;
+    right: 3%;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    &__textWrap {
+        margin: 25px;
+    }
+    &__close {
+        position: absolute;
+        top: 2%;
+        right: 4%;
+        width: 30px;
+        height: 30px;
+        background-color: #fff;
+        border: 1px solid rgba(211, 210, 213, 1);
+        z-index: 3;
+        border-radius: 50%;
+        transform: rotate(45deg);
+        cursor: pointer;
+        &:before {
+            position: absolute;
+            content: "";
+            border: 1px solid rgba(29, 31, 34, 1);
+            width: 1px;
+            height: 20px;
+            left: 13px;
+            top: 4px;
+        }
+        &:after {
+            position: absolute;
+            content: "";
+            border: 1px solid rgba(29, 31, 34, 1);
+            width: 20px;
+            height: 1px;
+            top: 13px;
+            left: 4px;
+        }
+    }
+}

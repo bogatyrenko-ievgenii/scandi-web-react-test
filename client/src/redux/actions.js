@@ -9,10 +9,22 @@ import {
     INCR_QTY_OF_CART_ITEM,
     DECR_QTY_OF_CART_ITEM,
     CHANGE_ATTRIBUTE,
-    GET_TOTAL_COUNT
+    GET_TOTAL_COUNT,
+    SHOW_BAG_SELECT,
+    SHOW_CURRENCY_SELECT,
+    GET_QTY_ITEMS_IN_CART
 } from "./types";
 import { getCurrencyByID } from "../graphql/queries/pricesById";
 import { store } from "./store";
+
+
+export function onShowBagSelect() {
+    return { type: SHOW_BAG_SELECT }
+}
+
+export function onShowCurrencySelect() {
+    return { type: SHOW_CURRENCY_SELECT }
+}
 
 export function changeCategory(name) {
     return {
@@ -86,6 +98,10 @@ export function changeAttribute(payload) {
 
 export function getTotalCount() {
     return { type: GET_TOTAL_COUNT }
+}
+
+export function getCountItemsInCart() {
+    return { type: GET_QTY_ITEMS_IN_CART }
 }
 
 export const fetchPrices = (currency) => async (dispatch) => {

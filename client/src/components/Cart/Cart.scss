@@ -1,9 +1,10 @@
 .Cart {
     padding-top: 80px;
-
+    position: relative;
     margin-bottom: 40px;
     font-size: 16px;
     color: rgba(29, 31, 34, 1);
+    min-height: calc(100vh - 80px);
     &__list {
         list-style-type: none;
     }

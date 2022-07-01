@@ -1,0 +1,23 @@
+.Currencies {
+    padding: 10px 0;
+    list-style-type: none;
+    position: absolute;
+    top: 27px;
+    right: -28px;
+    font-weight: 500;
+    font-size: 18px;
+    color: rgba(29, 31, 34, 1);
+    box-shadow: 0px 4px 15.4px rgb(0, 0, 0, 0.08);
+    z-index: 3;
+    &__item {
+        padding-left: 20px;
+        height: 45px;
+        width: 114px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    .active {
+        background-color: rgba(238, 238, 238, 1);
+    }
+}

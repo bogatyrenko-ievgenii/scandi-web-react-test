@@ -35,6 +35,7 @@ class ProdDetails extends PureComponent {
         }
         if (prevState.selectedAttributes !== this.state.selectedAttributes) {
             this.compareLength();
+            this.props.showModal();
         }
     }
 

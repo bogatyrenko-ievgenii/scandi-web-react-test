@@ -96,7 +96,7 @@ class BagItem extends PureComponent {
             ? <button className={`${mainClass}__operator ${mainClass}__operator-decr`} onClick={() => decrQtyCartItem(product.id)} />
             : <button className={`${mainClass}__operator`} onClick={() => removeFromCart(product.id)}><Bin /></button>
 
-        const imageSwitcher = mainClass === 'Cart'
+        const imageSwitcher = mainClass === 'Cart' && gallery.length > 1
             ? <div className={`${mainClass}__switchers`}>
                 <button type="button" className={`${mainClass}__switcher`} onClick={() => this.onImageSwitch('prev')}>
                     <Arrow />
