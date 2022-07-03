@@ -1,7 +1,6 @@
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { createBrowserHistory } from 'history';
 
 import Container from '../Container';
 import Spinner from '../Spinner';
@@ -9,7 +8,6 @@ import ErrorIndicator from '../ErrorIndicator';
 import CatalogueItem from './CatalogueItem';
 import BackDrops from '../BackDrops';
 import { getProductsByCategory } from '../../graphql/queries/getProductsByCategory';
-import * as actions from '../../redux/actions';
 
 import './Catalogue.scss';
 
@@ -19,6 +17,7 @@ class Catalogue extends PureComponent {
         loading: false,
         error: false,
         products: [],
+        location: ''
     }
 
     componentDidMount() {
@@ -29,6 +28,10 @@ class Catalogue extends PureComponent {
         if (prevProps.activeCategory !== this.props.activeCategory) {
             this.getData();
         }
+    }
+
+    getLocation = () => {
+        this.setState({ location: window.location.pathname })
     }
 
     getData = async () => {
@@ -49,7 +52,6 @@ class Catalogue extends PureComponent {
     }
 
     render() {
-        console.log(createBrowserHistory());
         const { activeCategory } = this.props;
         const { error, loading, products } = this.state
         const notAvailable = error ? <ErrorIndicator /> : null;
@@ -86,4 +88,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, actions)(Catalogue);
+export default connect(mapStateToProps)(Catalogue);

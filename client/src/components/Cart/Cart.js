@@ -1,7 +1,8 @@
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../redux/actions';
+import PropTypes from 'prop-types';
 
+import * as actions from '../../redux/actions';
 import Container from '../Container';
 import BagItem from '../BagItem';
 import BackDrops from '../BackDrops';
@@ -32,7 +33,6 @@ class Cart extends PureComponent {
 
     render() {
         const { cart, activeCurrency, totalCount, cartItemsQty } = this.props;
-
         let mainClass = 'Cart';
 
         return (
@@ -72,6 +72,14 @@ function mapStateToProps(state) {
         cartItemsQty: state.cart.itemsQty,
         activeCurrency: state.activeCurrency.symbol,
     }
+}
+
+Cart.propTypes = {
+    cart: PropTypes.array.isRequired,
+    totalCount: PropTypes.number.isRequired,
+    cartItemsQty: PropTypes.number.isRequired,
+    activeCurrency: PropTypes.string.isRequired,
+    changeCategory: PropTypes.func.isRequired,
 }
 
 export default connect(mapStateToProps, actions)(Cart);

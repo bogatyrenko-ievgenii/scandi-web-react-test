@@ -1,10 +1,12 @@
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
-// import { changeProdId } from '../../redux/actions';
-import * as actions from '../../redux/actions'
-import { getProductByID } from '../../graphql/queries/getProductByID';
+import PropTypes from 'prop-types';
 
+import * as actions from '../../redux/actions';
+import { getProductByID } from '../../graphql/queries/getProductByID';
 import Container from '../Container';
+import Spinner from '../Spinner';
+import ErrorIndicator from '../ErrorIndicator';
 import ProdDetails from './ProdDetails'
 import BackDrops from '../BackDrops';
 import Modal from '../Modal';
@@ -36,7 +38,7 @@ class ProductDescrPage extends PureComponent {
 
     getProdToState = async () => {
         this.setState({ loading: true })
-        return await getProductByID(this.props.activeProd.id)
+        return await getProductByID(this.props.activeProd)
             .then(response => {
                 const product = response.data.product;
                 this.setState({
@@ -66,8 +68,8 @@ class ProductDescrPage extends PureComponent {
     render() {
         const { error, loading, name, brand, description, prodId, gallery, activeImage, attributes, prices, inStock, showModal } = this.state;
 
-        const processing = loading ? 'Loading' : null;
-        const notAvailable = error ? 'Error' : null;
+        const processing = loading ? <Spinner size={200} /> : null;
+        const notAvailable = error ? <ErrorIndicator /> : null;
         const showProduct = !(loading || error) ? true : null;
 
         return (
@@ -108,18 +110,13 @@ class ProductDescrPage extends PureComponent {
 
 function mapStateToProps(state) {
     return {
-        activeCurrency: state.activeCurrency,
-        activeProd: state.activeProd,
-        // bagSelect: state.customSelects.bagSelect
+        activeProd: state.activeProd.id,
     }
 }
 
-// function mapDispatchToProps(dispatch) {
-//     return {
-//         changeProdId: (id) => dispatch(changeProdId(id)),
-//         changeCategory: (name) => dispatch(changeCategory(name))
-//     }
-// }
-
+ProductDescrPage.propTypes = {
+    activeProd: PropTypes.string.isRequired,
+    changeCategory: PropTypes.func.isRequired
+}
 
 export default connect(mapStateToProps, actions)(ProductDescrPage);

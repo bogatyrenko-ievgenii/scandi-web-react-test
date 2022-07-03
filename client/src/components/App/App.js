@@ -2,7 +2,7 @@ import React from "react";
 
 import Layout from "../Layout";
 import Header from "../Header";
-import Pages from "../pages";
+import Pages from "../Pages";
 
 function App() {
     return <div className="App">

@@ -1,5 +1,5 @@
 import { PureComponent } from 'react';
-// import { PropTypes } from 'prop-types';
+import { PropTypes } from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -18,14 +18,6 @@ import cartImg from './Icons/Empty Cart.svg';
 
 class Actions extends PureComponent {
 
-    // state = {
-    //     // currency: null,
-    //     // openSelect: false,
-    //     // openBagPreview: false,
-    //     // count: null,
-    //     // cartPrices: []
-    // }
-
     componentDidMount() {
         this.props.getCountItemsInCart();
         this.props.getTotalCount();
@@ -37,50 +29,7 @@ class Actions extends PureComponent {
             getCountItemsInCart();
             getTotalCount();
         }
-        // if (prevProps.activeCategory !== activeCategory && this.state.openBagPreview) {
-        //     this.setState({ openBagPreview: false })
-        // }
-        // if (prevState.openBagPreview !== this.state.openBagPreview) {
-
-        //     if (this.state.openBagPreview) {
-        //         // document.body.style.overflow = 'hidden'
-        //         // document.querySelector('.Layout').children[1].
-        //         // document.querySelector('.Layout').children[1].scrollHeight = '100vh'
-
-        //     } else {
-        //         document.body.style.overflow = 'unset'
-        //     }
-        // }
     }
-
-    // 2 ф-ции перенос в header
-
-    // showSelect = () => {
-    //     this.setState(({ openSelect }) => ({
-    //         openSelect: !openSelect
-    //     }))
-    //     if (this.state.openBagPreview) {
-    //         this.setState({
-    //             openBagPreview: false
-    //         })
-    //     }
-    // }
-
-    // showBagPreview = () => {
-    //     this.setState(({ openBagPreview }) => ({
-    //         openBagPreview: !openBagPreview
-    //     }))
-    // }
-
-    // getCountItemsInCart = () => {
-    //     const cart = this.props.cart
-    //     if (cart.length !== 0) {
-    //         let count = cart.reduce((prev, current) => {
-    //             return prev + current.qty
-    //         }, 0)
-    //         this.setState({ count })
-    //     }
-    // }
 
     render() {
         const { cart, activeCurrency, priceLoadingStatus, totalCount, onShowBagSelect, onShowCurrencySelect, bagSelect, currencySelect, cartItemsQty } = this.props;
@@ -157,8 +106,17 @@ function mapStateToProps(state) {
 }
 
 Actions.propTypes = {
-    // currentCurrency: PropTypes.string.isRequired,
-    // currencies: PropTypes.array.isRequired,
+    cart: PropTypes.array.isRequired,
+    activeCurrency: PropTypes.string.isRequired,
+    priceLoadingStatus: PropTypes.string.isRequired,
+    totalCount: PropTypes.number.isRequired,
+    onShowBagSelect: PropTypes.func.isRequired,
+    onShowCurrencySelect: PropTypes.func.isRequired,
+    bagSelect: PropTypes.bool.isRequired,
+    currencySelect: PropTypes.bool.isRequired,
+    cartItemsQty: PropTypes.number.isRequired,
+    getCountItemsInCart: PropTypes.func.isRequired,
+    getTotalCount: PropTypes.func.isRequired,
 }
 
 

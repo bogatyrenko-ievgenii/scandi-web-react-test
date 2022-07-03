@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 const Attribute = ({ type, value, selected, setAttribute, blockName }) => {
 
     const other = type !== 'Color' ? 'other' : null;
@@ -14,6 +16,13 @@ const Attribute = ({ type, value, selected, setAttribute, blockName }) => {
         </li>
     );
 
+}
+
+Attribute.propTypes = {
+    type: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    setAttribute: PropTypes.func.isRequired,
+    blockName: PropTypes.string.isRequired
 }
 
 export default Attribute;

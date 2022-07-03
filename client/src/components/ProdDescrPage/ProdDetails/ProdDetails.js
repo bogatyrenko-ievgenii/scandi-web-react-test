@@ -1,11 +1,13 @@
 import { PureComponent } from 'react';
 import parse from 'html-react-parser';
 import { connect } from 'react-redux';
+import { nanoid } from '@reduxjs/toolkit';
+import PropTypes from 'prop-types';
+
+import { testIfInCart } from '../../../utiils/IfInCart';
 import { addToCart } from '../../../redux/actions';
 import { removeFromCart } from '../../../redux/actions';
 import Attributes from '../../Attributes/Attributes';
-import { testIfInCart } from '../../../reusedScripts/IfInCart';
-import { nanoid } from '@reduxjs/toolkit';
 
 class ProdDetails extends PureComponent {
 
@@ -83,7 +85,7 @@ class ProdDetails extends PureComponent {
         const id = testIfInCart(name, selectedAttributes, inCart)
 
         if (!id) {
-            addToCart({ id: nanoid(), prodId: prodId, name: name, items: selectedAttributes, qty: 1, activePrice: amount })
+            addToCart({ id: nanoid(), prodId, name, items: selectedAttributes, qty: 1, activePrice: amount })
         } else {
             const item = cart.items.find(item => item.id === id);
             let newQty = item.qty + 1;
@@ -120,10 +122,6 @@ class ProdDetails extends PureComponent {
     }
 }
 
-
-
-
-
 function mapStateToProps(state) {
     return {
         activeCurrency: state.activeCurrency,
@@ -136,6 +134,16 @@ function mapDispatchToProps(dispatch) {
         addToCart: (item) => dispatch(addToCart(item)),
         removeFromCart: (idx) => dispatch(removeFromCart(idx))
     }
+}
+
+ProdDetails.propTypes = {
+    activeCurrency: PropTypes.object.isRequired,
+    cart: PropTypes.object.isRequired,
+    addToCart: PropTypes.func.isRequired,
+    removeFromCart: PropTypes.func.isRequired,
+    attr: PropTypes.array.isRequired,
+    prices: PropTypes.array.isRequired,
+    showModal: PropTypes.func.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProdDetails);

@@ -14,7 +14,7 @@ import {
     SHOW_CURRENCY_SELECT,
     GET_QTY_ITEMS_IN_CART
 } from "./types";
-import { getCurrencyByID } from "../graphql/queries/pricesById";
+import { getCurrencyByID } from "../graphql/queries/getPricesById";
 import { store } from "./store";
 
 

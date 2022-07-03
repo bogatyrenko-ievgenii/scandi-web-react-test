@@ -1,8 +1,8 @@
 import { PureComponent } from "react";
 import { connect } from "react-redux";
+import PropTypes from 'prop-types';
 
 import { changeCurrency, fetchPrices } from "../../../../redux/actions";
-// import * as actions from '../../../../redux/actions';
 
 class CurrenciesItem extends PureComponent {
 
@@ -22,8 +22,8 @@ class CurrenciesItem extends PureComponent {
     onExit = () => this.setState({ mouseOverStyle: '' });
 
     render() {
-
         const { currency: { symbol, label } } = this.props;
+
         return (
             <li
                 onClick={() => this.handleClick(symbol)}
@@ -35,7 +35,7 @@ class CurrenciesItem extends PureComponent {
 }
 
 function mapStateToProps(state) {
-    return { state }
+    return {}
 }
 
 function mapDispatchToProps(dispatch) {
@@ -43,6 +43,11 @@ function mapDispatchToProps(dispatch) {
         changeCurrency: (symbol) => dispatch(changeCurrency(symbol)),
         fetchPrices: (symbol) => dispatch(fetchPrices(symbol))
     }
+}
+
+CurrenciesItem.propTypes = {
+    close: PropTypes.func.isRequired,
+    currency: PropTypes.object.isRequired,
 }
 
 

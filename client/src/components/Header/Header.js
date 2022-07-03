@@ -1,21 +1,16 @@
 import { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import { changeCurrency } from '../../redux/actions';
-import getNavigation from '../../graphql/queries/getNav';
 
+import getNavigation from '../../graphql/queries/getNav';
 import Nav from './Nav';
 import Container from '../Container';
 import Actions from './HeaderActions';
 import Spinner from '../Spinner';
 
-
 import logo from './icons/a-logo.svg';
 import './Header.scss';
 
-
 class Header extends PureComponent {
     state = {
-        currencies: [],
         categories: [],
         loading: true,
         error: false,
@@ -58,17 +53,4 @@ class Header extends PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        activeCurrency: state.activeCurrency,
-        activeCategory: state.activeCategory.name
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        changeCurrency: (symbol) => dispatch(changeCurrency(symbol))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default Header;

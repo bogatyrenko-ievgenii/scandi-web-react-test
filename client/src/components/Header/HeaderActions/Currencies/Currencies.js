@@ -1,5 +1,7 @@
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import getCurrencies from '../../../../graphql/queries/getCurrency';
 import { changeCurrency } from '../../../../redux/actions';
 import Spinner from '../../../Spinner';
@@ -20,11 +22,11 @@ class Currencies extends PureComponent {
 
 
     handleGetCurrencies = () => {
-        const { activeCurrency: { symbol }, changeCurrency } = this.props;
+        const { activeCurrency, changeCurrency } = this.props;
         this.setState({ loading: true })
         getCurrencies
             .then(response => {
-                if (!symbol) {
+                if (!activeCurrency) {
                     changeCurrency(response.data.currencies[0].symbol)
                 }
                 this.setState({
@@ -61,7 +63,7 @@ class Currencies extends PureComponent {
 
 function mapStateToProps(state) {
     return {
-        activeCurrency: state.activeCurrency
+        activeCurrency: state.activeCurrency.symbol
     }
 }
 
@@ -69,6 +71,11 @@ function mapDispatchToProps(dispatch) {
     return {
         changeCurrency: (symbol) => dispatch(changeCurrency(symbol)),
     }
+}
+
+Currencies.propTypes = {
+    activeCurrency: PropTypes.string.isRequired,
+    showSelect: PropTypes.func.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Currencies);

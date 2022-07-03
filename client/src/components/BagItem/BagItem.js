@@ -1,4 +1,5 @@
 import { PureComponent } from "react";
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { nanoid } from "@reduxjs/toolkit";
 
@@ -6,10 +7,9 @@ import * as actions from '../../redux/actions';
 import { getProductByID } from '../../graphql/queries/getProductByID';
 import Attributes from "../Attributes";
 import Spinner from "../Spinner";
-import Bin from "./binSVG";
-import Arrow from "./arrowSVG";
+import Bin from "./icons/Bin";
+import Arrow from "./icons/Arrow";
 
-// import './BagItemBanner.scss'
 
 class BagItem extends PureComponent {
     state = {
@@ -20,22 +20,11 @@ class BagItem extends PureComponent {
         gallery: [],
         viewImageIdx: 0,
         attributes: [],
-        selected: 0,
     }
 
     componentDidMount() {
         this.getData();
-        // this.getAmount();
     }
-
-    // componentDidUpdate(prevProps) {
-    //     const { activePrice, qty } = this.props.product;
-
-    //     if (prevProps.product.activePrice !== activePrice
-    //         || prevProps.product.qty !== qty) {
-    //         this.getAmount();
-    //     }
-    // }
 
     getData = async () => {
         this.setState({ loading: true })
@@ -50,20 +39,8 @@ class BagItem extends PureComponent {
                     attributes: product.attributes,
                 })
             }).catch(() => {
-                this.setState({ error: 'Product was not founded..', loading: false })
+                this.setState({ error: 'Product was not found...', loading: false })
             })
-    }
-
-    // getAmount = () => {
-    //     const { product } = this.props;
-    //     this.setState({ amount: 0 });
-    //     this.setState({ amount: product.activePrice * product.qty })
-    // }
-
-    setSelected = (idx) => {
-        this.setState({
-            selected: idx
-        })
     }
 
     onImageSwitch = (type) => {
@@ -85,6 +62,7 @@ class BagItem extends PureComponent {
     }
 
     render() {
+
         const { brand, name, gallery, viewImageIdx, attributes, loading, error } = this.state;
         const { activeCurrency, decrQtyCartItem, incrQtyCartItem, product, removeFromCart, mainClass } = this.props;
 
@@ -151,10 +129,17 @@ class BagItem extends PureComponent {
 
 function mapStateToProps(state) {
     return {
-        cart: state.cart.items,
         activeCurrency: state.activeCurrency.symbol
     }
 }
 
+BagItem.propTypes = {
+    activeCurrency: PropTypes.string.isRequired,
+    mainClass: PropTypes.string.isRequired,
+    product: PropTypes.object.isRequired,
+    removeFromCart: PropTypes.func.isRequired,
+    decrQtyCartItem: PropTypes.func.isRequired,
+    incrQtyCartItem: PropTypes.func.isRequired,
+}
 
 export default connect(mapStateToProps, actions)(BagItem);
