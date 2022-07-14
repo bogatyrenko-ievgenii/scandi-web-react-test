@@ -12,7 +12,7 @@ import Attributes from '../../Attributes/Attributes';
 class ProdDetails extends PureComponent {
 
     state = {
-        amount: '',
+        amount: 0,
         attrQty: 0,
         selectedAttributes: {},
         filled: false,
@@ -98,7 +98,7 @@ class ProdDetails extends PureComponent {
         const { brand, name, attr, descr, activeCurrency: { symbol } } = this.props;
         const { amount, activeBtn } = this.state;
         const notFound = !(amount || symbol) ? <div>Not found</div> : null;
-        const price = !notFound ? <div className='Pdp__amount'>{symbol}{amount}</div> : null;
+        const price = !notFound ? <div className='Pdp__amount'>{symbol}{amount.toFixed(2)}</div> : null;
 
         return (
             <div className='Pdp__details'>

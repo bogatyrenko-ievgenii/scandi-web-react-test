@@ -13,7 +13,7 @@ class CatalogueItem extends PureComponent {
 
     state = {
         showBtn: false,
-        amount: null
+        amount: 0,
     }
 
     componentDidMount() {
@@ -46,14 +46,12 @@ class CatalogueItem extends PureComponent {
         localStorage.setItem('currentProd', id)
     }
 
-    showBtn = (outOfStock) => {
-        if (!outOfStock) {
+    onShowBtn = (shouldShow = 'hide') => {
+        if (shouldShow === 'hide') {
+            this.setState({ showBtn: false })
+        } else if (shouldShow) {
             this.setState({ showBtn: true })
         }
-    }
-
-    hideBtn = () => {
-        this.setState({ showBtn: false })
     }
 
     onHandleClick = () => {
@@ -93,22 +91,20 @@ class CatalogueItem extends PureComponent {
     }
 
     render() {
-        const { product: { inStock, id, gallery, name, brand, }, activeCurrency } = this.props;
+        const { product: { inStock, id, gallery, name, brand }, activeCurrency } = this.props;
         const { showBtn, amount } = this.state;
 
-        const outOfStock = !inStock;
-        const classOutOfStock = outOfStock ? 'disabled' : '';
         const show = showBtn ? 'show' : '';
 
         return <li
-            disabled={!!outOfStock} onMouseEnter={() => this.showBtn(classOutOfStock)}
-            onMouseLeave={this.hideBtn} className={`Catalogue__item ${classOutOfStock}`}
+            disabled={!!!inStock} onMouseEnter={() => this.onShowBtn(!!inStock)}
+            onMouseLeave={() => this.onShowBtn()} className={`Catalogue__item ${!inStock && 'disabled'}`}
         >
             <Link onClick={() => this.addToStorage(id)} to={`/product?id=${id}`}>
                 <img className='Catalogue__image' src={gallery[0]} alt={name} />
                 <div className='Catalogue__name'>{brand} {name}</div>
-                <div className='Catalogue__price'>{activeCurrency} {amount}</div>
-                {outOfStock && <div className="Catalogue__outOfStock">out of stock</div>}
+                <div className='Catalogue__price'>{activeCurrency} {amount.toFixed(2)}</div>
+                {!inStock && <div className="Catalogue__outOfStock">out of stock</div>}
             </Link>
             <div onClick={this.onHandleClick} className={`Catalogue__addToCart ${show}`}>
                 <CartImg />

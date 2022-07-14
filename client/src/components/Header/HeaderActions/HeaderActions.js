@@ -12,11 +12,11 @@ import * as actions from '../../../redux/actions';
 import './HeaderActions.scss';
 import './BagItemBanner.scss';
 import './Currencies.scss';
-import './bagPreview.scss';
+import './miniCart.scss';
 import arrow from './Icons/arrow.svg';
 import cartImg from './Icons/Empty Cart.svg';
 
-class Actions extends PureComponent {
+class HeaderActions extends PureComponent {
 
     componentDidMount() {
         this.props.getCountItemsInCart();
@@ -37,7 +37,8 @@ class Actions extends PureComponent {
         const pricesLoading = priceLoadingStatus === 'loading' ? <Spinner size={20} /> : null;
         const pricesLoadError = priceLoadingStatus === 'error' ? <ErrorIndicator /> : null;
 
-        let mainClass = 'BagItemBanner'
+        let mainClass = 'BagItemBanner';
+        let scrollbar = cart.length > 2 ? 'miniCart__activeScrollbar' : 'miniCart__block-pr';
 
         return (
             <div className='Actions' >
@@ -57,34 +58,38 @@ class Actions extends PureComponent {
                 {currencySelect && <Currencies showSelect={onShowCurrencySelect} />}
 
                 {bagSelect &&
-                    <div className="bagPreview">
-                        <div className="bagPreview__title">
-                            <span className='bagPreview__title-bold'>My Bag, </span>
-                            <span className='bagPreview__title-medium'>{cartItemsQty} items</span>
+                    <div className="miniCart">
+                        <div className="miniCart__block-top">
+                            <span className='miniCart__title-bold'>My Bag, </span>
+                            <span className='miniCart__title-medium'>{cartItemsQty} items</span>
                         </div>
-                        <ul className='bagPreview__list'>
-                            {cart.map(item => {
-                                return <li key={item.id} className={mainClass}>
-                                    <BagItem product={item} mainClass={mainClass} />
-                                </li>
-                            })}
-                        </ul>
-                        <div className="bagPreview__totalPrice">
-                            <span className='bagPreview__totalPrice-title'>Total</span>
-                            <span className='bagPreview__totalPrice-amount'>{activeCurrency}{totalCount.toFixed(2)}</span>
+                        <div className={`miniCart__block-middle ${scrollbar}`}>
+                            <ul className='miniCart__list'>
+                                {cart.map(item => {
+                                    return <li key={item.id} className={mainClass}>
+                                        <BagItem product={item} mainClass={mainClass} />
+                                    </li>
+                                })}
+                            </ul>
                         </div>
-                        <div className="bagPreview__buttons">
-                            <Link onClick={onShowBagSelect} to={'/cart'}
-                                className='bagPreview__button bagPreview__button-white'
-                                type='button'>
-                                view bag
-                            </Link>
-                            <button
-                                className='bagPreview__button bagPreview__button-green'
-                                type='button'
-                                onClick={() => alert('this must be "Check out"')}>
-                                check out
-                            </button>
+                        <div className="miniCart__block-bottom">
+                            <div className="miniCart__totalPrice">
+                                <span className='miniCart__totalPrice-title'>Total</span>
+                                <span className='miniCart__totalPrice-amount'>{activeCurrency}{totalCount.toFixed(2)}</span>
+                            </div>
+                            <div className="miniCart__buttons">
+                                <Link onClick={onShowBagSelect} to={'/cart'}
+                                    className='miniCart__button miniCart__button-white'
+                                    type='button'>
+                                    view bag
+                                </Link>
+                                <button
+                                    className='miniCart__button miniCart__button-green'
+                                    type='button'
+                                    onClick={() => alert('this must be "Check out"')}>
+                                    check out
+                                </button>
+                            </div>
                         </div>
                     </div>}
             </div>
@@ -105,7 +110,7 @@ function mapStateToProps(state) {
     }
 }
 
-Actions.propTypes = {
+HeaderActions.propTypes = {
     cart: PropTypes.array.isRequired,
     activeCurrency: PropTypes.string.isRequired,
     priceLoadingStatus: PropTypes.string.isRequired,
@@ -120,4 +125,4 @@ Actions.propTypes = {
 }
 
 
-export default connect(mapStateToProps, actions)(Actions);
+export default connect(mapStateToProps, actions)(HeaderActions);
