@@ -37,7 +37,7 @@ class ProdDetails extends PureComponent {
         }
         if (prevState.selectedAttributes !== this.state.selectedAttributes) {
             this.compareLength();
-            this.props.showModal();
+            // this.props.showModal();
         }
     }
 
@@ -143,7 +143,7 @@ ProdDetails.propTypes = {
     removeFromCart: PropTypes.func.isRequired,
     attr: PropTypes.array.isRequired,
     prices: PropTypes.array.isRequired,
-    showModal: PropTypes.func.isRequired,
+    // showModal: PropTypes.func.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProdDetails);

@@ -9,7 +9,8 @@ import Spinner from '../Spinner';
 import ErrorIndicator from '../ErrorIndicator';
 import ProdDetails from './ProdDetails'
 import BackDrops from '../BackDrops';
-import Modal from '../Modal';
+// import Modal from '../Modal';
+import OutOfStock from '../OutOfStock/';
 
 import './ProductDescrPage.scss';
 
@@ -28,7 +29,7 @@ class ProductDescrPage extends PureComponent {
         attributes: [],
         prices: [],
         inStock: null,
-        showModal: false
+        // showModal: false
     }
 
     componentDidMount() {
@@ -61,19 +62,20 @@ class ProductDescrPage extends PureComponent {
         this.setState({ activeImage: idx })
     }
 
-    onShowModal = () => {
-        this.setState({ showModal: !this.state.showModal })
-    }
+    // onShowModal = () => {
+    //     this.setState({ showModal: !this.state.showModal })
+    // }
 
     render() {
-        const { error, loading, name, brand, description, prodId, gallery, activeImage, attributes, prices, inStock, showModal } = this.state;
+        const { error, loading, name, brand, description, prodId, gallery, activeImage, attributes, prices, inStock } = this.state;
 
         const processing = loading ? <Spinner size={200} /> : null;
         const notAvailable = error ? <ErrorIndicator /> : null;
-        const showProduct = !(loading || error) ? true : null;
+        const showProduct = !(loading || error);
+        const transparency = inStock ? '' : 'Pdp__transparent';
 
         return (
-            <main className="Pdp">
+            <main className={`Pdp ${transparency}`}>
                 <Container>
                     {processing}
                     {notAvailable}
@@ -89,19 +91,21 @@ class ProductDescrPage extends PureComponent {
                             <img className='Pdp__img' src={gallery[activeImage]} alt={name} />
                         </div>
                         <ProdDetails prodId={prodId} brand={brand} name={name}
-                            attr={attributes} descr={description} prices={prices} inStock={inStock} showModal={this.onShowModal} />
+                            attr={attributes} descr={description} prices={prices} inStock={inStock} />
                     </div>
                     }
                 </Container>
+                {!inStock && <OutOfStock percent={15} />}
                 <BackDrops />
-                {!inStock && showModal &&
+                {/* {!inStock && showModal &&
                     <Modal showModalStatus={showModal} closeModal={this.onShowModal}>
                         <article className='Modal__textWrap'>
                             <div>This product isn't in Stock.</div>
                             <div>Investigatively, it couldn't be added to cart.</div>
                             <div>Try to look for something else...</div>
                         </article>
-                    </Modal>}
+                    </Modal>} */}
+                {/* showModal={this.onShowModal} */}
             </main>
 
         );

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import * as actions from '../../../redux/actions';
 import { testIfInCart } from '../../../utiils/IfInCart';
+import OutOfStock from '../../OutOfStock';
 
 import CartImg from './icons/CartImg';
 import { nanoid } from '@reduxjs/toolkit';
@@ -95,16 +96,17 @@ class CatalogueItem extends PureComponent {
         const { showBtn, amount } = this.state;
 
         const show = showBtn ? 'show' : '';
+        const disabled = inStock ? '' : 'disabled';
 
         return <li
             disabled={!!!inStock} onMouseEnter={() => this.onShowBtn(!!inStock)}
-            onMouseLeave={() => this.onShowBtn()} className={`Catalogue__item ${!inStock && 'disabled'}`}
+            onMouseLeave={() => this.onShowBtn()} className={`Catalogue__item ${disabled}`}
         >
             <Link onClick={() => this.addToStorage(id)} to={`/product?id=${id}`}>
                 <img className='Catalogue__image' src={gallery[0]} alt={name} />
                 <div className='Catalogue__name'>{brand} {name}</div>
                 <div className='Catalogue__price'>{activeCurrency} {amount.toFixed(2)}</div>
-                {!inStock && <div className="Catalogue__outOfStock">out of stock</div>}
+                {!inStock && <OutOfStock percent={45} />}
             </Link>
             <div onClick={this.onHandleClick} className={`Catalogue__addToCart ${show}`}>
                 <CartImg />
