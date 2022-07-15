@@ -24,10 +24,13 @@ class HeaderActions extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        const { cart, getTotalCount, getCountItemsInCart } = this.props;
+        const { cart, getTotalCount, getCountItemsInCart, activeCategory, onShowBagSelect } = this.props;
         if (prevProps.cart !== cart) {
             getCountItemsInCart();
             getTotalCount();
+        }
+        if (prevProps.activeCategory !== activeCategory) {
+            // onShowBagSelect()
         }
     }
 

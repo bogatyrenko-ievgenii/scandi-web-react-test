@@ -6,6 +6,7 @@ import * as actions from '../../redux/actions';
 import Container from '../Container';
 import BagItem from '../BagItem';
 import BackDrops from '../BackDrops';
+import Carousel from '../Carousel';
 
 import './Cart.scss';
 
@@ -43,7 +44,10 @@ class Cart extends PureComponent {
                     <ul className={`${mainClass}__list`}>
                         {cart.map(item => {
                             return <li key={item.id} className={`${mainClass}__item`}>
-                                <BagItem product={item} mainClass={mainClass} />
+                                <BagItem product={item} mainClass={mainClass}
+                                    render={gallery => {
+                                        return <Carousel gallery={gallery} />
+                                    }} />
                                 <div className={`${mainClass}__decorLine`}></div>
                             </li>
                         })}

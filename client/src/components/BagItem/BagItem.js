@@ -8,7 +8,6 @@ import { getProductByID } from '../../graphql/queries/getProductByID';
 import Attributes from "../Attributes";
 import Spinner from "../Spinner";
 import Bin from "./icons/Bin";
-import Arrow from "./icons/Arrow";
 
 
 class BagItem extends PureComponent {
@@ -18,7 +17,6 @@ class BagItem extends PureComponent {
         brand: null,
         name: null,
         gallery: [],
-        viewImageIdx: 0,
         attributes: [],
     }
 
@@ -43,28 +41,10 @@ class BagItem extends PureComponent {
             })
     }
 
-    onImageSwitch = (type) => {
-        let { viewImageIdx, gallery } = this.state;
-
-        if (type === 'prev') {
-            if (viewImageIdx > 0) {
-                this.setState(({ viewImageIdx }) => ({
-                    viewImageIdx: viewImageIdx - 1
-                }))
-            }
-        } else if (type === 'next') {
-            if (viewImageIdx < gallery.length - 1) {
-                this.setState(({ viewImageIdx }) => ({
-                    viewImageIdx: viewImageIdx + 1
-                }))
-            }
-        }
-    }
-
     render() {
 
-        const { brand, name, gallery, viewImageIdx, attributes, loading, error } = this.state;
-        const { activeCurrency, decrQtyCartItem, incrQtyCartItem, product, removeFromCart, mainClass } = this.props;
+        const { brand, name, gallery, attributes, loading, error } = this.state;
+        const { activeCurrency, decrQtyCartItem, incrQtyCartItem, product, removeFromCart, mainClass, render } = this.props;
 
         const processing = loading ? <Spinner size={100} /> : null;
         const NotFound = error ? <div style={{ margin: '20px' }}>{error}</div> : null;
@@ -74,16 +54,7 @@ class BagItem extends PureComponent {
             ? <button className={`${mainClass}__operator ${mainClass}__operator-decr`} onClick={() => decrQtyCartItem(product.id)} />
             : <button className={`${mainClass}__operator`} onClick={() => removeFromCart(product.id)}><Bin /></button>
 
-        const imageSwitcher = mainClass === 'Cart' && gallery.length > 1
-            ? <div className={`${mainClass}__switchers`}>
-                <button type="button" className={`${mainClass}__switcher`} onClick={() => this.onImageSwitch('prev')}>
-                    <Arrow />
-                </button>
-                <button type="button" className={`${mainClass}__switcher ${mainClass}__switcher-reversed`} onClick={() => this.onImageSwitch('next')}>
-                    <Arrow />
-                </button>
-            </div>
-            : null;
+        const galleryShow = render ? render : () => <img className={`${mainClass}__image`} src={gallery[0]} alt={name} />
 
         return (
             <>
@@ -116,8 +87,7 @@ class BagItem extends PureComponent {
                                     {product.qty}
                                     {buttonSwitcher}
                                 </div>
-                                <img className={`${mainClass}__image`} src={gallery[viewImageIdx]} alt={name} />
-                                {imageSwitcher}
+                                {galleryShow(gallery)}
                             </div>
 
                         </div>

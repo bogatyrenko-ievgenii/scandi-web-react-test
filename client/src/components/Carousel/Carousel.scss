@@ -1,0 +1,44 @@
+.Carousel {
+    width: 200px;
+    height: 288px;
+    overflow: hidden;
+    position: relative;
+    &__list {
+        display: flex;
+        height: 288px;
+        position: relative;
+        transition: all 0.5s;
+    }
+    &__item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+    }
+    &__image {
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
+    }
+    &__switchers {
+        position: absolute;
+        right: 16px;
+        bottom: 16px;
+        width: 56px;
+        display: flex;
+        justify-content: space-between;
+    }
+    &__switcher {
+        background-color: rgba(0, 0, 0, 0.73);
+        width: 24px;
+        height: 24px;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        &-reversed {
+            transform: rotateZ(180deg);
+        }
+    }
+}
