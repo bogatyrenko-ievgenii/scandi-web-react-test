@@ -38,6 +38,7 @@ class Attributes extends PureComponent {
             this.setState({
                 selected: defaultAttributes[name]
             })
+            this.onSelect = () => { }
         }
     }
 
