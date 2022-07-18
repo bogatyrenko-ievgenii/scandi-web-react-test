@@ -1,15 +1,20 @@
 import { Routes, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import Catalogue from '../Catalogue';
 import ProductDescrPage from '../ProdDescrPage';
 import Cart from '../Cart';
 import ErrorIndicator from '../ErrorIndicator';
 
-const Pages = () => {
+const Pages = ({ activeCategory }) => {
+
+    const setPathToCategory = () => {
+        return activeCategory === 'all' ? '/' : `/${activeCategory}`;
+    }
+
     return (
         <Routes>
-            <Route path="/" element={<Catalogue />} />
-            <Route path="/clothes" element={<Catalogue />} />
-            <Route path="/tech" element={<Catalogue />} />
+            <Route path={setPathToCategory()} element={<Catalogue />} />
             <Route path="/product" element={<ProductDescrPage />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="*" element={<ErrorIndicator />} />
@@ -17,4 +22,10 @@ const Pages = () => {
     );
 }
 
-export default Pages;
+function mapStateToProps(state) {
+    return {
+        activeCategory: state.activeCategory.name
+    }
+}
+
+export default connect(mapStateToProps)(Pages);

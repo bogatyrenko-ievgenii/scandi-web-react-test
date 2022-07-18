@@ -3,7 +3,7 @@ import { PureComponent } from 'react';
 import getNavigation from '../../graphql/queries/getNav';
 import Nav from './Nav';
 import Container from '../Container';
-import Actions from './HeaderActions';
+import HeaderActions from './HeaderActions';
 import Spinner from '../Spinner';
 
 import logo from './icons/a-logo.svg';
@@ -46,7 +46,7 @@ class Header extends PureComponent {
                     {notAvailable}
                     {viewNav}
                     {viewNav && logotype}
-                    {viewNav && <Actions handleBackDropShow={this.handleBackDropShow} />}
+                    {viewNav && <HeaderActions handleBackDropShow={this.handleBackDropShow} />}
                 </Container>
             </header>
         )
