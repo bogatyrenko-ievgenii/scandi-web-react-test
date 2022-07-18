@@ -1,6 +1,5 @@
 export const testIfInCart = (name, items, inCart) => {
     let itemIsInCart = false;
-    // const arrayOfCart = this.props.cart.items;
     let notYetInCart = JSON.stringify(items);
 
     inCart.forEach(cartItem => {
@@ -13,9 +12,3 @@ export const testIfInCart = (name, items, inCart) => {
     })
     return itemIsInCart
 }
-
-// required arguments: 
-//  name - name of product, 
-//  items - tested object with: key - name of attribute, value - value of attribute,
-//  inCart - is in cart yet
-//return false or product id 

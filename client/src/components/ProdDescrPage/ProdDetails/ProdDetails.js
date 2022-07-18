@@ -143,7 +143,6 @@ ProdDetails.propTypes = {
     removeFromCart: PropTypes.func.isRequired,
     attr: PropTypes.array.isRequired,
     prices: PropTypes.array.isRequired,
-    // showModal: PropTypes.func.isRequired,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProdDetails);

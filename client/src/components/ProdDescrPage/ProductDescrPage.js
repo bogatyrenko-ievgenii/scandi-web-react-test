@@ -9,7 +9,6 @@ import Spinner from '../Spinner';
 import ErrorIndicator from '../ErrorIndicator';
 import ProdDetails from './ProdDetails'
 import BackDrops from '../BackDrops';
-// import Modal from '../Modal';
 import OutOfStock from '../OutOfStock/';
 
 import './ProductDescrPage.scss';
@@ -29,7 +28,6 @@ class ProductDescrPage extends PureComponent {
         attributes: [],
         prices: [],
         inStock: null,
-        // showModal: false
     }
 
     componentDidMount() {
@@ -62,10 +60,6 @@ class ProductDescrPage extends PureComponent {
         this.setState({ activeImage: idx })
     }
 
-    // onShowModal = () => {
-    //     this.setState({ showModal: !this.state.showModal })
-    // }
-
     render() {
         const { error, loading, name, brand, description, prodId, gallery, activeImage, attributes, prices, inStock } = this.state;
 
@@ -97,15 +91,6 @@ class ProductDescrPage extends PureComponent {
                 </Container>
                 {!inStock && <OutOfStock percent={15} />}
                 <BackDrops />
-                {/* {!inStock && showModal &&
-                    <Modal showModalStatus={showModal} closeModal={this.onShowModal}>
-                        <article className='Modal__textWrap'>
-                            <div>This product isn't in Stock.</div>
-                            <div>Investigatively, it couldn't be added to cart.</div>
-                            <div>Try to look for something else...</div>
-                        </article>
-                    </Modal>} */}
-                {/* showModal={this.onShowModal} */}
             </main>
 
         );
