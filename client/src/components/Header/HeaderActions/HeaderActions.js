@@ -10,7 +10,6 @@ import Spinner from '../../Spinner';
 import * as actions from '../../../redux/actions';
 
 import './HeaderActions.scss';
-import './BagItemBanner.scss';
 import './Currencies.scss';
 import './miniCart.scss';
 import arrow from './Icons/arrow.svg';
@@ -37,7 +36,7 @@ class HeaderActions extends PureComponent {
         const pricesLoading = priceLoadingStatus === 'loading' ? <Spinner size={20} /> : null;
         const pricesLoadError = priceLoadingStatus === 'error' ? <ErrorIndicator /> : null;
 
-        let mainClass = 'BagItemBanner';
+        let mainClass = 'BagItemMiniCart';
         let scrollbar = cart.length > 2 ? 'miniCart__activeScrollbar' : 'miniCart__block-pr';
 
         return (
@@ -66,7 +65,7 @@ class HeaderActions extends PureComponent {
                         <div className={`miniCart__block-middle ${scrollbar}`}>
                             <ul className='miniCart__list'>
                                 {cart.map(item => {
-                                    return <li key={item.id} className={mainClass}>
+                                    return <li key={item.id}>
                                         <BagItem product={item} mainClass={mainClass} />
                                     </li>
                                 })}

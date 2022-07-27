@@ -45,9 +45,8 @@ class Cart extends PureComponent {
                         {cart.map(item => {
                             return <li key={item.id} className={`${mainClass}__item`}>
                                 <BagItem product={item} mainClass={mainClass}
-                                    render={gallery => {
-                                        return <Carousel gallery={gallery} />
-                                    }} />
+                                    render={gallery => <Carousel gallery={gallery} />
+                                    } />
                                 <div className={`${mainClass}__decorLine`}></div>
                             </li>
                         })}

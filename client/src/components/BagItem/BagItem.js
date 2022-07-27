@@ -9,6 +9,8 @@ import Attributes from "../Attributes";
 import Spinner from "../Spinner";
 import Bin from "./icons/Bin";
 
+import './BagItemMiniCart.scss';
+import './BagItemCart.scss';
 
 class BagItem extends PureComponent {
     state = {
@@ -41,14 +43,17 @@ class BagItem extends PureComponent {
             })
     }
 
+
     render() {
 
         const { brand, name, gallery, attributes, loading, error } = this.state;
-        const { activeCurrency, decrQtyCartItem, incrQtyCartItem, product, removeFromCart, mainClass, render } = this.props;
+        const { activeCurrency, decrQtyCartItem, incrQtyCartItem, product, removeFromCart, render } = this.props;
 
         const processing = loading ? <Spinner size={100} /> : null;
         const NotFound = error ? <div style={{ margin: '20px' }}>{error}</div> : null;
-        const bagItem = !(loading || error) ? true : null;
+        const bagItem = !(loading || error);
+
+        const mainClass = render ? 'BagItemCart' : 'BagItemMiniCart';
 
         const buttonSwitcher = product.qty > 0
             ? <button className={`${mainClass}__operator ${mainClass}__operator-decr`} onClick={() => decrQtyCartItem(product.id)} />
@@ -62,7 +67,7 @@ class BagItem extends PureComponent {
                 {NotFound}
                 {bagItem &&
                     <>
-                        <div className={`${mainClass}__wrapper`}>
+                        <div className={`${mainClass}`}>
                             <div className={`${mainClass}__details`}>
                                 <h3 className={`${mainClass}__brand`}>{brand}</h3>
                                 <div className={`${mainClass}__name`}>{name}</div>
@@ -72,14 +77,14 @@ class BagItem extends PureComponent {
                                 <ul className={`${mainClass}__attrs`}>
                                     {attributes.map(attribute => {
                                         return <Attributes key={nanoid()} name={attribute.name}
-                                            items={attribute.items} blockName={mainClass} defaultAttributes={product.items}
+                                            items={attribute.items} blockName={mainClass} hasCarousel={!!render} defaultAttributes={product.items}
                                             id={product.id}
                                         />
                                     })}
                                 </ul>
                             </div>
 
-                            <div className={`${mainClass}__wrapper-inner`}>
+                            <div className={`${mainClass}__wrapper`}>
                                 <div className={`${mainClass}__counter`}>
                                     <button
                                         className={`${mainClass}__operator ${mainClass}__operator-incr`}

@@ -1,0 +1,84 @@
+.BagItemCart {
+    min-height: 190px;
+    display: flex;
+    justify-content: space-between;
+
+    &__wrapper {
+        display: flex;
+        position: relative;
+    }
+    &__image {
+        width: 200px;
+        height: 288px;
+        object-fit: contain;
+    }
+    &__counter {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        margin-right: 8px;
+        font-weight: 500;
+        font-size: 24px;
+    }
+    &__operator {
+        width: 45px;
+        height: 45px;
+        border: 1px solid rgba(29, 31, 34, 1);
+        position: relative;
+        cursor: pointer;
+        background-color: #fff;
+        &-incr {
+            &::before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 15px;
+                height: 1px;
+                border-top: 1px solid rgba(29, 31, 34, 1);
+            }
+            &::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 1px;
+                height: 15px;
+                border-left: 1px solid rgba(29, 31, 34, 1);
+            }
+        }
+        &-decr {
+            &::before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 15px;
+                height: 1px;
+                border-top: 1px solid rgba(29, 31, 34, 1);
+            }
+        }
+    }
+    &__brand {
+        font-weight: 600;
+        font-size: 30px;
+        margin-bottom: 16px;
+    }
+    &__name {
+        font-weight: 400;
+        font-size: 30px;
+        margin-bottom: 20px;
+    }
+    &__price {
+        font-weight: 700;
+        font-size: 24px;
+        margin: 14px 0 20px 0;
+    }
+    &__attrs {
+        list-style-type: none;
+    }
+}

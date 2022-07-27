@@ -1,10 +1,9 @@
 .Cart {
-    padding-top: 80px;
     position: relative;
-    margin-bottom: 40px;
     font-size: 16px;
     color: rgba(29, 31, 34, 1);
     min-height: calc(100vh - 80px);
+    padding: 80px 0 80px 0;
     &__list {
         list-style-type: none;
     }
@@ -17,144 +16,12 @@
     &__decorLine {
         width: 100%;
         border-bottom: 1px solid rgba(229, 229, 229, 1);
-        margin: 16px 0 24px 0;
+        margin: 24px 0 24px 0;
     }
-    &__wrapper {
-        min-height: 190px;
-        display: flex;
-        justify-content: space-between;
-        &-inner {
-            display: flex;
-            position: relative;
-        }
-    }
-    &__image {
-        width: 200px;
-        height: 288px;
-        object-fit: contain;
-    }
-    &__counter {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        margin-right: 8px;
-        font-weight: 500;
-        font-size: 24px;
-    }
-    &__operator {
-        width: 45px;
-        height: 45px;
-        border: 1px solid rgba(29, 31, 34, 1);
-        position: relative;
-        cursor: pointer;
-        background-color: #fff;
-        &-incr {
-            &::before {
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 15px;
-                height: 1px;
-                border-top: 1px solid rgba(29, 31, 34, 1);
-            }
-            &::after {
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 1px;
-                height: 15px;
-                border-left: 1px solid rgba(29, 31, 34, 1);
-            }
-        }
-        &-decr {
-            &::before {
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 15px;
-                height: 1px;
-                border-top: 1px solid rgba(29, 31, 34, 1);
-            }
-        }
-    }
-    &__brand {
-        font-weight: 600;
-        font-size: 30px;
-        margin-bottom: 16px;
-    }
-    &__name {
-        font-weight: 400;
-        font-size: 30px;
-        margin-bottom: 20px;
-    }
-    &__price {
-        font-weight: 700;
-        font-size: 24px;
-        margin: 14px 0 20px 0;
-    }
-    &__attrs {
-        list-style-type: none;
-    }
-    &__attrName {
-        margin-bottom: 7px;
-        font-family: "Source Sans Pro", sans-serif;
-        font-weight: 700;
-        font-size: 18px;
-        text-transform: uppercase;
-    }
-    &__attrItems {
-        font-family: "Source Sans Pro", sans-serif;
-        list-style-type: none;
-        display: flex;
-        margin-bottom: 16px;
-    }
-    &__param {
-        &-color {
-            width: 32px;
-            height: 32px;
-            margin-right: 8px;
-            cursor: pointer;
-        }
-        &-other {
-            font-family: "Source Sans Pro", sans-serif;
-            width: 63px;
-            height: 45px;
-            font-weight: 400;
-            font-size: 14px;
-            border: 1px solid rgba(29, 31, 34, 1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 8px;
-            cursor: pointer;
-        }
-    }
-    .activeOth {
-        color: rgba(255, 255, 255, 1);
-        background-color: rgba(29, 31, 34, 1);
-    }
-    .activeCo {
-        position: relative;
-        &::before {
-            content: "";
-            width: 36px;
-            height: 36px;
-            border: 1px solid rgba(94, 206, 123, 1);
-            position: absolute;
-            left: -2px;
-            top: -2px;
-        }
-    }
+
     &__tax {
         font-weight: 400;
-        margin: 8px 0;
+        margin: 32px 0 8px 0;
         font-size: 24px;
     }
     &__qty {

@@ -1,0 +1,86 @@
+.Attributes {
+    font-family: "Source Sans Pro", sans-serif;
+    &__attrName {
+        &-big {
+            margin-bottom: 7px;
+            font-weight: 700;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+        &-mini {
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 400;
+        }
+    }
+    &__attrItems {
+        &-big {
+            list-style-type: none;
+            display: flex;
+            margin-bottom: 16px;
+        }
+        &-mini {
+            margin-bottom: 10px;
+            list-style-type: none;
+            display: flex;
+            margin-bottom: 10px;
+        }
+    }
+    &__color {
+        margin-right: 8px;
+        &-big {
+            width: 32px;
+            height: 32px;
+        }
+        &-mini {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    &__other {
+        font-weight: 400;
+        font-size: 14px;
+        border: 1px solid rgba(29, 31, 34, 1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 8px;
+        &-big {
+            width: 63px;
+            height: 45px;
+        }
+        &-mini {
+            min-width: 24px;
+            height: 24px;
+            padding: 4px;
+        }
+    }
+    .activeOth {
+        color: rgba(255, 255, 255, 1);
+        background-color: rgba(29, 31, 34, 1);
+    }
+    .activeCo-big {
+        position: relative;
+        &::before {
+            content: "";
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(94, 206, 123, 1);
+            position: absolute;
+            left: -2px;
+            top: -2px;
+        }
+    }
+    .activeCo-mini {
+        position: relative;
+        &::before {
+            content: "";
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(94, 206, 123, 1);
+            position: absolute;
+            left: -2px;
+            top: -2px;
+        }
+    }
+}

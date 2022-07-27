@@ -4,14 +4,20 @@ import Attribute from './Attribute/Attribute';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 
+import './Attributes.scss';
+
 class Attributes extends PureComponent {
 
     state = {
         selected: null,
+        attributeCursor: 'pointer',
     }
 
     componentDidMount() {
-        this.setDefaultAttribute();
+        if (this.props.defaultAttributes) {
+            this.setDefaultAttribute();
+            this.makeDisableOnSelect();
+        }
     }
 
     onSelect = (value) => {
@@ -32,30 +38,47 @@ class Attributes extends PureComponent {
         }
     }
 
+    makeDisableOnSelect = () => {
+        this.onSelect = () => { }
+        this.setState({ attributeCursor: 'default' })
+    }
+
     setDefaultAttribute = () => {
         const { defaultAttributes, name } = this.props;
-        if (defaultAttributes) {
-            this.setState({
-                selected: defaultAttributes[name]
-            })
-            this.onSelect = () => { }
+        this.setState({
+            selected: defaultAttributes[name]
+        })
+    }
+
+    getAttrStyleSize = () => {
+        let size = '';
+        if (this.state.attributeCursor === 'default') {
+            if (this.props.hasCarousel) {
+                size = 'big'
+            } else {
+                size = 'mini'
+            }
+        } else {
+            size = 'big'
         }
+        return size
     }
 
     render() {
-        const { name, items, blockName } = this.props;
+        const { name, items } = this.props;
+        const size = this.getAttrStyleSize();
 
         return (
-            <li className={`${blockName}__attribute`}>
-                <div className={`${blockName}__attrName`}>{name}:</div>
-                <ul className={`${blockName}__attrItems`}>
+            <li className='Attributes'>
+                <div className={`Attributes__attrName-${size}`}>{name}:</div>
+                <ul className={`Attributes__attrItems-${size}`}>
                     {items.map((item, idx) => {
                         return (
-                            <Attribute key={`${name}${idx}`} type={name} value={item.value} blockName={blockName}
+                            <Attribute key={`${name}${idx}`} type={name} value={item.value} getSize={this.getAttrStyleSize}
                                 selected={this.state.selected} setAttribute={() => this.onSelect(item.value)}
+                                attributeCursor={this.state.attributeCursor}
                             />
                         )
-
                     })}
                 </ul>
             </li>

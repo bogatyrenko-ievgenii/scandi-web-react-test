@@ -14,9 +14,9 @@ const Pages = ({ activeCategory }) => {
 
     return (
         <Routes>
-            <Route path={setPathToCategory()} element={<Catalogue />} />
             <Route path="/product" element={<ProductDescrPage />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path={setPathToCategory()} element={<Catalogue />} />
             <Route path="*" element={<ErrorIndicator />} />
         </Routes>
     );
