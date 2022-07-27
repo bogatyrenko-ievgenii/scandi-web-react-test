@@ -2,13 +2,13 @@ import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { nanoid } from '@reduxjs/toolkit';
 
 import * as actions from '../../../redux/actions';
 import { testIfInCart } from '../../../utiils/IfInCart';
 import OutOfStock from '../../OutOfStock';
 
 import CartImg from './icons/CartImg';
-import { nanoid } from '@reduxjs/toolkit';
 
 class CatalogueItem extends PureComponent {
 
